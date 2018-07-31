@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+X-COMMENT: Main-Class will be added automatically by build
+Created-By: 13.06.2018 (Roberto Garcia)
+Main-Class: factura.MainFactura
+
+

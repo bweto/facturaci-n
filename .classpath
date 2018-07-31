@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="dist/co.factura.jar"/>
+	<classpathentry kind="lib" path="dist/lib/itextpdf-5.4.3.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="dist/lib/mariadb-java-client-2.2.5-sources.jar"/>
+	<classpathentry kind="lib" path="dist/lib/postgresql-42.2.2.jar"/>
+	<classpathentry kind="lib" path="itextpdf-5.4.3.jar"/>
+	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
