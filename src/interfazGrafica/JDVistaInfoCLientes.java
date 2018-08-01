@@ -7,6 +7,7 @@ package interfazGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -27,6 +28,7 @@ public class JDVistaInfoCLientes extends JDialog{
     @SuppressWarnings("FieldMayBeFinal")
     private List<Cliente> client;
     private JButtonRadius JBCorregir;
+    
     /**JDVistaInfoClientes
      * Muestra la información de los clientes.
      * @param client 
@@ -37,18 +39,17 @@ public class JDVistaInfoCLientes extends JDialog{
         java.awt.Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/escritura.png"));
         this.setIconImage(icon);
         this.setTitle("Modificar Información");
-        this.setSize(320, 300);
+        this.setSize(800, 620);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(1);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.white);
         this.cerrar();
         this.modificar = new JPModificarInformacion(client);
         add(modificar,BorderLayout.CENTER);
         this.crearJBCorregir();
-        this.setVisible(true);
-       
+        this.setVisible(true); 
     }
     
     /**cerrar
@@ -69,10 +70,12 @@ public class JDVistaInfoCLientes extends JDialog{
      */
     private void crearJBCorregir(){
     ImageIcon icon = new ImageIcon(getClass().getClass().getResource("/iconos/modificar.png"));
-       this.JBCorregir = new JButtonRadius(icon, Color.white, new Color(255,204,0),15,15);
+       this.JBCorregir = new JButtonRadius(icon, new Color(255,204,0), Color.white,1,1);
+       this.JBCorregir.setFont(new Font("Sans-serif", 1, 12));
+       this.JBCorregir.setText("  Grabar Correción");
        this.JBCorregir.setFocusPainted(false);
        
-       add(JBCorregir,BorderLayout.AFTER_LAST_LINE);	
+       add(JBCorregir,BorderLayout.BEFORE_FIRST_LINE);	
     }
     
     /**getJBCorregir

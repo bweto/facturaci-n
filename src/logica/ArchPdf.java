@@ -28,6 +28,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.io.File;
@@ -114,7 +115,13 @@ public class ArchPdf {
             mipdf.add(tbcontenedor);
             mipdf.add(tbvalores);
             mipdf.add(tbFinal);
-            mipdf.close();        
+            mipdf.close();  
+            try {
+                File path = new File (ruta_destino+".pdf");
+                Desktop.getDesktop().open(path);
+            }catch (IOException ex) {
+            ex.printStackTrace();
+            }
                 }           
         }//se cierra el PDF&
             
@@ -436,11 +443,13 @@ public class ArchPdf {
             Phrase tx = new Phrase(fac.getConceptos().get(k),fuenteBoltS);
             canIte.setPhrase(tx);
         }
- 
-            PdfPCell canIte = valore.get(1);
-            Phrase tx = new Phrase("$ "+darFormatoDec(String.valueOf(fac.getTotal())),fuenteBoltS);
+        for(int k=0;k<fac.getValores().size();k++){
+            PdfPCell canIte = valore.get(k+1);
+            //Phrase tx = new Phrase("$ "+darFormatoDec(String.valueOf(fac.getTotal())),fuenteBoltS);
+            double total_trabajado = fac.getValores().get(k)* Double.parseDouble(fac.getCantiad().get(k));
+            Phrase tx = new Phrase("$ "+darFormatoDec(String.valueOf(total_trabajado)),fuenteBoltS);
             canIte.setPhrase(tx);
-        
+        }
         //
         tbcontenedor.addCell(señor);
         tbcontenedor.addCell(nit);

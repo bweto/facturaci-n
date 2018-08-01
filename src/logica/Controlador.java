@@ -252,7 +252,6 @@ public class Controlador {
             String datosCliente[] = iteracion.split(";") ;
             Cliente leido = new Cliente();
             leido.setNombre(datosCliente[0]);
-            
             leido.setNit(datosCliente[1]);
             leido.setTelefono(datosCliente[2]);
             leido.setDireccion(datosCliente[3]);
@@ -551,7 +550,9 @@ public class Controlador {
             public void focusLost(FocusEvent e) {
           
              fila = ventana.getModificar().getTblClientes().getSelectedRow()+1;
-             ventana.getModificar().getTblClientes().editCellAt(0, 0);
+             ventana.getModificar().getTblClientes().clearSelection();
+             ventana.getModificar().getTblClientes().setFocusable(false);
+             //ventana.getModificar().getTblClientes().editCellAt(0, 0);
              //acturalizarDB(fila,ventana.getModificar().getTblClientes());
              //System.out.println("Esta es la fila: "+fila);
              
@@ -574,7 +575,7 @@ public class Controlador {
             nom = tbl.getValueAt(fila, 1).toString();
             nit = tbl.getValueAt(fila, 2).toString();
             tel = tbl.getValueAt(fila, 3).toString();
-            dire = tbl.getValueAt(fila, 4).toString();
+            dire = tbl.getValueAt(fila,4).toString();
             fila = fila-1;
             db.actualizarRegistro(fila, nom, nit, tel, dire);
         }
@@ -622,13 +623,13 @@ public class Controlador {
                     if(i == fila){
                         fila=fila+1;
                      db.actualizarRegistro(fila, nombre, nit, direccion, telefono);
-                     JOptionPane.showMessageDialog(null, "Modificación exitosa"
-                        ,"Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+//                     JOptionPane.showMessageDialog(null, "Modificación exitosa"
+//                        ,"Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
                      }
                     }
                     catch(ArrayIndexOutOfBoundsException ei){
-                        JOptionPane.showMessageDialog(null,"No se pueden almacenar campos vacios.",
-                                 "Mensaje informativo", JOptionPane.INFORMATION_MESSAGE);
+//                        JOptionPane.showMessageDialog(null,"No se pueden almacenar campos vacios.",
+//                                 "Mensaje informativo", JOptionPane.INFORMATION_MESSAGE);
                     }
                     
                     
@@ -861,7 +862,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "", primeraParte = "",segundaParte = "",terceraParte ="";
         if((String.valueOf(vl.charAt(0)).equals("1"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))){
-            primeraParte = "cien millones";
+            primeraParte = " cien millones";
         }
         else{
             primeraParte = escribirCentesimas(vl.charAt(0)+""+vl.charAt(1)+""+vl.charAt(2))+" millones ";
@@ -873,7 +874,7 @@ public class Controlador {
             segundaParte = escribirCentesimas(""+vl.charAt(3)+""+vl.charAt(4)+""+vl.charAt(5))+" mil ";
         }
         if((String.valueOf(vl.charAt(6)).equals("0"))&&(String.valueOf(vl.charAt(7)).equals("0"))&&(String.valueOf(vl.charAt(8)).equals("0"))){
-            terceraParte ="pesos moneda corriente";
+            terceraParte =" pesos moneda corriente.";
         }
         else{
             terceraParte = escribirCentesimas(""+vl.charAt(6)+""+vl.charAt(7)+""+vl.charAt(8))+" pesos modeda corriente.";
@@ -883,7 +884,7 @@ public class Controlador {
           &&(String.valueOf(vl.charAt(5)).equals("0"))&&(String.valueOf(vl.charAt(6)).equals("0"))
           &&(String.valueOf(vl.charAt(7)).equals("0"))&&(String.valueOf(vl.charAt(8)).equals("0"))   
                 ){
-            terceraParte = "de pesos moneda corriente ";
+            terceraParte = " de pesos moneda corriente.";
             
         }
         rt = primeraParte+segundaParte+terceraParte;
@@ -903,7 +904,7 @@ public class Controlador {
         parteuno = escribirDecimas(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1)))+" millones "; 
         parteDos = escribirCentesimas(String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3))+String.valueOf(vl.charAt(4)))+" mil ";
         parteTres = escribirCentesimas(String.valueOf(vl.charAt(5))+String.valueOf(vl.charAt(6))+String.valueOf(vl.charAt(7)))
-             +"pesos moneda corriente"; 
+             +" pesos moneda corriente."; 
         
              rt = parteuno+parteDos+parteTres;
      return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
@@ -919,13 +920,13 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt="",parteuno = "",partedos = "",parteTres = "";
         if((String.valueOf(vl.charAt(0)).equals("1"))){
-          parteuno = "un millon "; 
+          parteuno = " un millon "; 
         }else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" millones "; 
         }
         partedos = escribirCentesimas(String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3)))+" mil ";
         parteTres = escribirCentesimas(String.valueOf(vl.charAt(4))+String.valueOf(vl.charAt(5))+String.valueOf(vl.charAt(6)))
-           +"pesos moneda corriente"; 
+           +" pesos moneda corriente."; 
         rt=parteuno+partedos+parteTres;
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
@@ -941,7 +942,7 @@ public class Controlador {
         String rt = "",parteuno="",partedos="";  
         parteuno = escribirCentesimas(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2)))+" mil";
         partedos = escribirCentesimas(String.valueOf(vl.charAt(3))+String.valueOf(vl.charAt(4))+String.valueOf(vl.charAt(5)));  
-        rt =parteuno+partedos+"pesos moneda corriente";
+        rt =parteuno+partedos+" pesos moneda corriente.";
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
     
@@ -956,7 +957,7 @@ public class Controlador {
         String rt = "",parteuno="",partedos="";
         parteuno = escribirDecimas(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1)))+" mil";
         partedos = escribirCentesimas(String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3))+String.valueOf(vl.charAt(4)))
-             +"pesos moneda corriente."; 
+             +" pesos moneda corriente."; 
         rt = parteuno+partedos;      
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
@@ -971,13 +972,13 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",parteuno = "",partedos = "";
         if(String.valueOf(vl.charAt(0)).equals("1")){
-            parteuno = "mil ";
+            parteuno = " mi";
         }
         else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" mil "; 
         }
         partedos = escribirCentesimas(String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3)))
-             +"pesos moneda corriente";
+             +" pesos moneda corriente.";
         rt = parteuno+partedos;         
         return rt;
     }
@@ -992,7 +993,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "";
         rt = escribirCentesimas(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2)))
-             +"pesos moneda corriente";
+             +" pesos moneda corriente.";
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
     
@@ -1007,10 +1008,10 @@ public class Controlador {
         String rt = "";
         if(!String.valueOf(vl.charAt(0)).equals("0")){
         String val = valores.get(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1)));
-        rt = val+"pesos moneda corriente";    
+        rt = val+" pesos moneda corriente.";    
         } 
         else{
-        rt = valores.get(String.valueOf(vl.charAt(1)))+"pesos moneda corriente";
+        rt = valores.get(String.valueOf(vl.charAt(1)))+" pesos moneda corriente.";
         }   
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
@@ -1025,7 +1026,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt="";
         rt = escribirUnidades(String.valueOf(vl.charAt(0)))
-             +"pesos moneda corriente";
+             +" pesos moneda corriente.";
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
     
@@ -1039,7 +1040,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",c = "",d = "",ite = "";
       if((String.valueOf(vl.charAt(0)).equals("1"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))){
-          c = "cien";
+          c = "cien ";
           rt=c;
         }  
       else if((!String.valueOf(vl.charAt(0)).equals("0"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))
@@ -1231,11 +1232,8 @@ public class Controlador {
         int añoVen = fecSis.get(Calendar.YEAR);
         int añoOk = añoVen-1900;
         Date date_fin = new Date(añoOk,mesVen,diaVen);
-        ventana_principal.getCuerpo().getFecha_vencimiento().setDate(date_fin);
-        
+        ventana_principal.getCuerpo().getFecha_vencimiento().setDate(date_fin);    
     }
-    
-  
-    
+
     }
 

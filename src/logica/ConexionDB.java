@@ -131,8 +131,8 @@ public void actualizarRegistro(int id, String nombre, String nit, String direcci
                    + "nit = ?, direccion = ?, telefono = ? WHERE id = ?" );
            ps.setString(1, nombre);
            ps.setString(2, nit);
-           ps.setString(3, direccion);
-           ps.setString(4, telefono); 
+           ps.setString(3, telefono);
+           ps.setString(4, direccion); 
            ps.setInt(5, id);
            ps.execute();
            ps.close();

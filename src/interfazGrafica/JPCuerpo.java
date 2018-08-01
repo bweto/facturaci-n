@@ -54,7 +54,6 @@ public class JPCuerpo extends JPanel {
         this.setSize(565, 465);
         this.setLayout(null);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.setBackground(Color.WHITE);
         this.crearJLFechaExpedicion();
         this.crearFechaExpedicion();
         this.crearJLFechaVencimiento();
@@ -216,9 +215,11 @@ public class JPCuerpo extends JPanel {
      */
     private void crearJTAConcepto() {
         JScrollPane scroll;
-	this.JTAConcepto = new JTextArea(5,1);
+	this.JTAConcepto = new JTextArea(3,1);
         this.JTAConcepto.setBounds(75, 125, 475, 80);
         this.JTAConcepto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        
+  
         scroll = new JScrollPane(JTAConcepto);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setBounds(75, 125, 475, 80);
@@ -243,7 +244,7 @@ public class JPCuerpo extends JPanel {
      */
     private void crearJTAValores() {
         JScrollPane scrollV;
-	this.JTAValores = new JTextArea(5, 1);
+	this.JTAValores = new JTextArea(3, 1);
         this.JTAValores.setBounds(75, 220, 150, 80);
         this.JTAValores.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         scrollV = new JScrollPane(JTAValores);
@@ -283,7 +284,7 @@ public class JPCuerpo extends JPanel {
      */
     private void crearJTACantidades() {
         JScrollPane scrollC;
-	this.JTACantidades = new JTextArea(5, 1);
+	this.JTACantidades = new JTextArea(3, 1);
         this.JTACantidades.setBounds(315, 220, 75, 80);
         this.JTACantidades.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         scrollC = new JScrollPane(JTACantidades);

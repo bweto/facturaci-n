@@ -28,6 +28,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.io.File;
@@ -91,6 +92,7 @@ public class ArchPdf_1 {
      * @throws DocumentException
      * @throws java.io.FileNotFoundException 
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public void crear_PDF(Factura fac) throws  IOException, DocumentException, FileNotFoundException{
         this.decimal = new DecimalFormat("###,###,###,###");
         //abre ventana de dialogo "guardar"
@@ -121,7 +123,13 @@ public class ArchPdf_1 {
             mipdf.add(tbcontenedor);
             mipdf.add(tbvalores);
             mipdf.add(tbFinal);
-            mipdf.close();        
+            mipdf.close();
+            try {
+                File path = new File (ruta_destino+".pdf");
+                Desktop.getDesktop().open(path);
+            }catch (IOException ex) {
+            ex.printStackTrace();
+            }
                 }           
         }//se cierra el PDF&
             
@@ -505,11 +513,18 @@ public class ArchPdf_1 {
             canIte.setPhrase(tx);
         }
     
-            PdfPCell canIte = valore.get(1);
-            canIte.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            String text ="$ "+darFormatoDec(String.valueOf(fac.getTotal()));
-            Phrase tx = new Phrase(String.format("%80s",text));
+//            PdfPCell canIte = valore.get(1);
+//            canIte.setHorizontalAlignment(Element.ALIGN_RIGHT);
+//            String text ="$ "+darFormatoDec(String.valueOf(fac.getTotal()));
+//            Phrase tx = new Phrase(String.format("%80s",text));
+//            canIte.setPhrase(tx);
+            for(int k=0;k<fac.getValores().size();k++){
+            PdfPCell canIte = valore.get(k+1);
+            //Phrase tx = new Phrase("$ "+darFormatoDec(String.valueOf(fac.getTotal())),fuenteBoltS);
+            double total_trabajado = fac.getValores().get(k)* Double.parseDouble(fac.getCantiad().get(k));
+            Phrase tx = new Phrase("$ "+darFormatoDec(String.valueOf(total_trabajado)),fuenteBolt);
             canIte.setPhrase(tx);
+        }
         
         //
         tbcontenedor.addCell(señor);
