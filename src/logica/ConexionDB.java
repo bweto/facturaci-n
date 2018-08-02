@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Roberto Garcia
@@ -32,23 +33,56 @@ public void conectar(){
       try {    
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             connection = DriverManager.getConnection("jdbc:derby:.\\DB\\facturas;create=true");
-//            String crearTbl = "create table iva(id numeric primary key, "
-//                    + "valor numeric)";
-//              PreparedStatement pstm = connection.prepareStatement(crearTbl);
-//                    pstm.execute();
-//                    pstm.close();
-//               String crearTbl = "update facturas set valor = 300 where id = 1";
-//                PreparedStatement pstm = connection.prepareStatement(crearTbl);
-//                    pstm.execute();
-//                    pstm.close();
-//                    System.out.println("Se creo tbla clientes");        
+            
+            existe();
+       
       } catch (ClassNotFoundException | SQLException ex) {
           Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
       }
    
 }
 
-public String selecionarRegistros(){
+private void existe(){
+    
+            Statement stmp;
+      try {
+          stmp = connection.createStatement();
+          stmp.executeQuery("select * from clientes");
+      } catch (SQLException ex) {
+          String con = "create table clientes("
+                    + "id numeric primary key, "
+                    + "nombre varchar(80),"
+                    + " nit varchar(20),"
+                    + " direccion varchar(100)"
+                    + ", telefono varchar(30))";
+          crear_tablas(con);
+           con = "create table iva(id numeric primary key, "
+                    + "valor numeric)";
+          crear_tablas(con);
+          con = "insert into iva values (1,19)";
+          crear_tablas(con);
+          con = "create table facturas(id numeric primary key, valor numeric)";
+          crear_tablas(con);
+          con = "insert into facturas values(1,322)";
+          crear_tablas(con);
+          
+          
+}
+
+}
+  private void crear_tablas(String consulta){
+      try {
+          PreparedStatement pstm = connection.prepareStatement(consulta);
+          pstm.execute();
+          pstm.close();
+      } catch (SQLException ex) {
+          Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+      }
+}
+        
+
+  @SuppressWarnings("ConvertToTryWithResources")
+  public String selecionarRegistros(){
    String informacion = ""; 
       conectar();
       try {
@@ -66,7 +100,8 @@ public String selecionarRegistros(){
           }
           result.close();
       } catch (SQLException ex) {
-          Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+          
+         
       }
    return informacion;
 }
@@ -84,7 +119,8 @@ public int selecionarIva(){
           result.close();
           pstm.close();
       } catch (SQLException ex) {
-          Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+          
+          
       }
     return iva;
 }
@@ -102,7 +138,8 @@ public int selecionarFactura(){
           result.close();
           pstm.close();
       } catch (SQLException ex) {
-          Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+          
+        
       }
     return Nfactu;   
 }

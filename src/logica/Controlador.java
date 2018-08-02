@@ -47,7 +47,7 @@ public class Controlador {
     private static int          numeF = 1000;
     private double              factN = 0;
     @SuppressWarnings("FieldMayBeFinal")
-    private Conexion            conexion;
+    //private Conexion            conexion;
     private JFIngresoDeClientes ingreso;
     @SuppressWarnings("FieldMayBeFinal")
     private String              dir;
