@@ -1,13 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package interfazGrafica;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
@@ -27,7 +26,7 @@ public class JButtonRadius extends JButton{
     private Color colorPresionado;
     private int f,f1;
     private Shape figura;
-    
+    private float opacity = 0.5f;
      /**JButoonRadius
      * Constructor para crear boton de forma circular.
      * @param icono
@@ -40,6 +39,7 @@ public class JButtonRadius extends JButton{
         this.colorFondo = fondo;
         this.colorPresionado = presion;
         setContentAreaFilled(false);
+        addMouseListener(new JButtonRadius.EventButton());
     }
     
     /**JButoonRadius
@@ -58,8 +58,12 @@ public class JButtonRadius extends JButton{
      this.colorFondo = fondo;
      this.colorPresionado = presion;
      setContentAreaFilled(false);
+     addMouseListener(new JButtonRadius.EventButton());
     }
-    
+    public JButtonRadius() {
+		super();
+		addMouseListener(new JButtonRadius.EventButton());
+	}
     /**paintComponent
      * Sobre escritura del metodo paintComponent para crear el fondo y contorno 
      * de la forma iniciada en el constructor.
@@ -67,18 +71,36 @@ public class JButtonRadius extends JButton{
      */
     @Override
     protected void paintComponent(Graphics g){
-       if (getModel().isArmed()) { 
-            g.setColor(colorPresionado); 
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+        if (getModel().isArmed()) { 
+            g2.setColor(colorPresionado); 
         } else { 
-            g.setColor(colorFondo); 
+            g2.setColor(colorFondo); 
         } 
         if (round) { 
-            g.fillOval(0, 0, getSize().width - 1, getSize().height - 1); 
+            g2.fillOval(0, 0, getSize().width - 1, getSize().height - 1); 
         } else { 
-            g.fillRoundRect(0, 0, getSize().width - 1, getSize().height - 1, f, f1); 
+            g2.fillRoundRect(0, 0, getSize().width - 1, getSize().height - 1, f, f1); 
         } 
-        super.paintComponent(g); 
-    }    
+        super.paintComponent(g2); 
+    }
+////////////////////////////////
+   public float getOpacity() {
+		return opacity;
+	}
+
+	// Metodo set de mi variable "opacity"
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
+		// Actualiza el control
+		repaint();
+	} 
+  
+
+
+
+///////////////////////////////    
     
     /**paintBorder
      * Sobre escritura del metodo paintBorder para lograr el borde con la misma 
@@ -113,4 +135,38 @@ public class JButtonRadius extends JButton{
         } 
         return (figura.contains(x, y)); 
     } 
+    
+    //*************************
+    public class EventButton extends MouseAdapter {
+		
+	@Override
+	public void mouseExited(MouseEvent me) {
+		efectHover(0.5f, 1f, 0.03f, 10, true);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent me) {
+		efectHover(1f, 0.5f, 0.03f, 10, false);
+	}
+
+        @Override
+	public void mousePressed(MouseEvent me) {
+		efectHover(1f, 0.6f, 0.1f, 1, false);
+	}
+
+	private void efectHover(float index, float range, float cont, int sleep, boolean event) {
+	new Thread(() -> {
+			for (float i = index; (event) ? i <= range : i >= range; i = (event) ? i + cont : i - cont) {
+                            setOpacity(i);
+				try {
+					Thread.sleep(sleep);
+                                    } catch (InterruptedException e) {
+                                        }
+				}
+			}).start();
+		}
+	}
+    
+    
+    //*************************
 }

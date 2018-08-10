@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -390,6 +391,7 @@ public class JPCuerpo extends JPanel {
        this.JBPdf = new JButtonRadius(icon, Color.white, new Color(255,204,0));
        this.JBPdf.setFocusPainted(false);
        this.JBPdf.setBounds(255, 340, 80, 80);
+       this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        add(JBPdf);	
     }
     

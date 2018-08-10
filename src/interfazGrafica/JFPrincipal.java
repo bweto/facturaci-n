@@ -4,6 +4,7 @@
 package interfazGrafica;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -120,6 +121,7 @@ public class JFPrincipal extends JFrame {
        ImageIcon Icrear = new ImageIcon(getClass().getClass().getResource("/iconos/crear.png"));
        crear = new JMenu();
        crear.setIcon(Icrear);
+       crear.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        barraMenu.add(crear);  
     }
     
@@ -131,6 +133,7 @@ public class JFPrincipal extends JFrame {
        actualizar = new JMenu();
        actualizar.setIcon(IActualizar);
        actualizar.setFocusable(true);
+       actualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        this.barraMenu.add(actualizar);  
     }
     
@@ -142,6 +145,7 @@ public class JFPrincipal extends JFrame {
        modificar = new JMenu();
        modificar.setIcon(IModificar);
        modificar.setFocusable(true);
+       modificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        this.barraMenu.add(modificar);  
     }
     
@@ -153,6 +157,7 @@ public class JFPrincipal extends JFrame {
        numeracion = new JMenu();
        numeracion.setIcon(IManual);
        numeracion.setFocusable(true);
+       numeracion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        this.barraMenu.add(numeracion);  
     }
     
@@ -164,6 +169,7 @@ public class JFPrincipal extends JFrame {
        manual = new JMenu();
        manual.setIcon(IManual);
        manual.setFocusable(true);
+       manual.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
        this.barraMenu.add(manual);  
     }
     
