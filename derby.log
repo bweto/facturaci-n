@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Aug 22 10:43:29 COT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0165-624d-f145-000000bcc848 
+on database directory C:\Users\DisToshiba\Documents\NetBeansProjects\co.factura\DB\facturas with class loader sun.misc.Launcher$AppClassLoader@1f96302 
+Loaded from file:/C:/Users/DisToshiba/Documents/NetBeansProjects/co.factura/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_161-b12
+user.dir=C:\Users\DisToshiba\Documents\NetBeansProjects\co.factura
+os.name=Windows 7
+os.arch=x86
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

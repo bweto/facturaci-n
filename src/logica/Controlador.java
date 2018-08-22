@@ -2,9 +2,11 @@
 package logica;
 
 import com.itextpdf.text.DocumentException;
+import interfazGrafica.JButtonRadius;
 import interfazGrafica.JDVistaInfoCLientes;
 import interfazGrafica.JFIngresoDeClientes;
 import interfazGrafica.JFPrincipal;
+import interfazGrafica.Vista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -22,6 +24,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -63,7 +66,7 @@ public class Controlador {
     @SuppressWarnings("UseOfObsoleteCollectionType")
     private Hashtable<String,String> cientos;
     private ConexionDB db;
-    
+    private Vista view;
     /**Controlador
      * Constructor de la clase controlador donde se inicia la conexion a la 
      * base de datos.
@@ -78,8 +81,9 @@ public class Controlador {
             this.dir                     = "src/informacion/db.txt";
             this.estaActivaVerClientes   = true;
             this.estaActivaCrearClientes = true;
-            this.ventana_principal       = new JFPrincipal();
+//            this.ventana_principal       = new JFPrincipal();
             this.facturas                = new ArrayList<>();
+            this.view                    = new Vista();
             this.leerDatos();
             this.ventana();
             this.ejecutarMenuCrear();
@@ -108,7 +112,8 @@ public class Controlador {
      * Lllena la información del jcombo box
      */
     private void llenar(){
-      JComboBox ite = ventana_principal.getCuerpo().getJCBCliente();
+      //JComboBox ite = ventana_principal.getCuerpo().getJCBCliente();
+      JComboBox ite = view.getjCBNombreCliente();
        for(int i =0;i<nombres.size();i++){
             ite.insertItemAt(nombres.get(i),i);
        }  
@@ -119,7 +124,8 @@ public class Controlador {
      */
     @SuppressWarnings("UnusedAssignment")
     private void asignarInfoComboBox(){
-        JComboBox ite = ventana_principal.getCuerpo().getJCBCliente();
+        //JComboBox ite = ventana_principal.getCuerpo().getJCBCliente();
+        JComboBox ite = view.getjCBNombreCliente();
         clientes.clear();
         nombres.clear();
         leerDatos();
@@ -134,7 +140,8 @@ public class Controlador {
      */
     @SuppressWarnings("Convert2Lambda")
     private void asignarValores(){
-        JComboBox iterador =ventana_principal.getCuerpo().getJCBCliente();
+        //JComboBox iterador =ventana_principal.getCuerpo().getJCBCliente();
+        JComboBox iterador = view.getjCBNombreCliente();
         iterador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,9 +152,12 @@ public class Controlador {
                     iterador.invalidate();
                     valorSelecionado = iterador.getSelectedIndex();
                     Cliente clienteSelecionado = clientes.get(valorSelecionado);
-                    ventana_principal.getCuerpo().getJTFNit().setText(clienteSelecionado.getNit());
-                    ventana_principal.getCuerpo().getJTFTelefono().setText(clienteSelecionado.getTelefono());
-                    ventana_principal.getCuerpo().getJTFDireccion().setText(clienteSelecionado.getDireccion()); 
+//                    ventana_principal.getCuerpo().getJTFNit().setText(clienteSelecionado.getNit());
+//                    ventana_principal.getCuerpo().getJTFTelefono().setText(clienteSelecionado.getTelefono());
+//                    ventana_principal.getCuerpo().getJTFDireccion().setText(clienteSelecionado.getDireccion()); 
+                    view.getjLcontentNit().setText(clienteSelecionado.getNit());
+                    view.getjLcontentTelefono().setText(clienteSelecionado.getTelefono());
+                    view.getjLcontentDireccion().setText(clienteSelecionado.getDireccion());
                    }
                    catch(ArrayIndexOutOfBoundsException eb){
                        
@@ -162,13 +172,16 @@ public class Controlador {
      */
     @SuppressWarnings("Convert2Lambda")
     private void calcularIVA() {
-        ventana_principal.getCuerpo().getJTAValores().addCaretListener(new CaretListener() {
+        //ventana_principal.getCuerpo().getJTAValores().addCaretListener(new CaretListener()
+        view.getjTXAValores().addCaretListener(new CaretListener() {
          @Override
          public void caretUpdate(CaretEvent e){
             double neto = 0;
             @SuppressWarnings("MismatchedReadAndWriteOfArray")
-            String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
-            String[] cantidades        = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
+//            String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
+//            String[] cantidades        = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
+              String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
+              String[] cantidades        = view.getjTXACantidad().getText().split("\n");
             for(int i = 0;i<valoresEntrantes.length;i++){
                 try{
                     if(cantidades.length == 0){
@@ -187,11 +200,16 @@ public class Controlador {
                 }
                 }
             @SuppressWarnings("UnusedAssignment")
-            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? neto*iva*0.01:0;  
+//            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? neto*iva*0.01:0;  
+//            double total    = valorIva+neto;
+//            ventana_principal.getCuerpo().getJTFIVA().setText(String.valueOf(valorIva));
+//            ventana_principal.getCuerpo().getJTFNeto().setText(String.valueOf(neto));
+//            ventana_principal.getCuerpo().getJTFTotal().setText(String.valueOf(total)); 
+            double valorIva = neto*iva*0.01;  
             double total    = valorIva+neto;
-            ventana_principal.getCuerpo().getJTFIVA().setText(String.valueOf(valorIva));
-            ventana_principal.getCuerpo().getJTFNeto().setText(String.valueOf(neto));
-            ventana_principal.getCuerpo().getJTFTotal().setText(String.valueOf(total));    
+            view.getjLcontentValorIva().setText(String.valueOf(valorIva));
+            view.getjLcontentValorNeto().setText(String.valueOf(neto));
+            view.getjLcontentValorTotal().setText(String.valueOf(total));
          }
      });         
     }
@@ -201,14 +219,17 @@ public class Controlador {
      */
     @SuppressWarnings("Convert2Lambda")
     private void calcularCantidades(){
-        ventana_principal.getCuerpo().getJTACantidades().addCaretListener(new CaretListener() {
+//        ventana_principal.getCuerpo().getJTACantidades()
+        view.getjTXACantidad().addCaretListener(new CaretListener() {
             @Override
             public void caretUpdate(CaretEvent e) {
                double neto = 0;
                @SuppressWarnings("MismatchedReadAndWriteOfArray")
-               String[] valoresCantidades = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
+//               String[] valoresCantidades = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
+               String[] valoresCantidades = view.getjTXACantidad().getText().split("\n");
                @SuppressWarnings("MismatchedReadAndWriteOfArray")
-               String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
+//               String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
+               String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
                for( int z = 0;z<valoresCantidades.length;z++){
                    try{
                        double iterador = Double.parseDouble(valoresEntrantes[z])*Double.parseDouble(valoresCantidades[z]);
@@ -219,11 +240,16 @@ public class Controlador {
                     }
                 }
             @SuppressWarnings("UnusedAssignment")
-            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? valorIva = neto*iva*0.01:0;  
+//            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? valorIva = neto*iva*0.01:0;  
+//            double total    = valorIva+neto;
+//            ventana_principal.getCuerpo().getJTFIVA().setText(darFormatoDec(String.valueOf(valorIva)));
+//            ventana_principal.getCuerpo().getJTFNeto().setText(darFormatoDec(String.valueOf(neto)));
+//            ventana_principal.getCuerpo().getJTFTotal().setText(darFormatoDec(String.valueOf(total)));
+            double valorIva = neto*iva*0.0;  
             double total    = valorIva+neto;
-            ventana_principal.getCuerpo().getJTFIVA().setText(darFormatoDec(String.valueOf(valorIva)));
-            ventana_principal.getCuerpo().getJTFNeto().setText(darFormatoDec(String.valueOf(neto)));
-            ventana_principal.getCuerpo().getJTFTotal().setText(darFormatoDec(String.valueOf(total)));
+            view.getjLcontentValorIva().setText(darFormatoDec(String.valueOf(valorIva)));
+            view.getjLcontentValorNeto().setText(darFormatoDec(String.valueOf(neto)));
+            view.getjLcontentValorTotal().setText(darFormatoDec(String.valueOf(total)));
             }            
             });
     }
@@ -266,7 +292,8 @@ public class Controlador {
      * Ejecuta la ccion al oprimir el boton crear del menu.
      */
     private void ejecutarMenuCrear(){
-        JMenuItem iterador = ventana_principal.getCrear();
+//        JMenuItem iterador = ventana_principal.getCrear();
+        JButtonRadius iterador = view.getBtnCreate();
         iterador.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {} 
@@ -385,7 +412,8 @@ public class Controlador {
     private void ejecutarMenuActualizar(){
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         String dir = "src/informacion/iva.txt";
-        JMenuItem iterador = ventana_principal.getActualizar();
+//        JMenuItem iterador = ventana_principal.getActualizar();
+        JButtonRadius iterador = view.getBtnIva();
         iterador.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {} 
@@ -435,7 +463,6 @@ public class Controlador {
     private void cargarMenuF(){
 //        String dirmenuF = "/informacion/menuf.txt";
 //        String[] valIva = conexion.leer(dirmenuF).split("&");
-          
         try{
         numeF =  db.selecionarFactura();
         }catch(NumberFormatException pl){
@@ -448,7 +475,8 @@ public class Controlador {
      */
     private void ejecutarMenuModificar(){
         
-        JMenuItem iterador = ventana_principal.getModificar();
+//        JMenuItem iterador = ventana_principal.getModificar();
+        JButtonRadius iterador = view.getBtnEdit();
         iterador.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {} 
@@ -496,8 +524,8 @@ public class Controlador {
     private void ejecutarMenuNumeracion(){
       
          //String dir = "src/informacion/numf.txt";
-         JMenuItem iterador = ventana_principal.getNumeracion();
-        
+//         JMenuItem iterador = ventana_principal.getNumeracion();
+         JButtonRadius iterador = view.getBtnConsecutivo();
          iterador.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {} 
@@ -528,13 +556,13 @@ public class Controlador {
     /**activarCampos
      * Activa los campos de información y crea un objeto cliente.
      */
-    private void activarCampos(){
-        ventana_principal.getCuerpo().getJCBCliente().setEditable(true);
-        ventana_principal.getCuerpo().getJTFNit().setEditable(true);
-        ventana_principal.getCuerpo().getJTFTelefono().setEditable(true);
-        ventana_principal.getCuerpo().getJTFDireccion().setEditable(true);
-            
-    }
+//    private void activarCampos(){
+//        ventana_principal.getCuerpo().getJCBCliente().setEditable(true);
+//        ventana_principal.getCuerpo().getJTFNit().setEditable(true);
+//        ventana_principal.getCuerpo().getJTFTelefono().setEditable(true);
+//        ventana_principal.getCuerpo().getJTFDireccion().setEditable(true);
+//            
+//    }
     
     /**Corregir
      * Corrige y almacena los valores de la tabla y los almacena de nuevo. 
@@ -644,10 +672,12 @@ public class Controlador {
      * Se crea el pdf de la factura.
      */
     private void crearpdf(){
-        this.ventana_principal.getCuerpo().getJBPdf().addActionListener((ActionEvent ae) -> {
+//        this.ventana_principal.getCuerpo().getJBPdf()
+        view.getBtnPdf().addActionListener((ActionEvent ae) -> {
             if(ae.getSource().equals(ventana_principal.getCuerpo().getJBPdf())){
                 try {
-                    if(Double.parseDouble(darFormatoC(ventana_principal.getCuerpo().getJTFTotal().getText()))< 999999999){
+                    //ventana_principal.getCuerpo().getJTFTotal()
+                    if(Double.parseDouble(darFormatoC(view.getjLcontentValorTotal().getText()))< 999999999){
                     ArchPdf nuevaFactura = new ArchPdf();
                     Factura nFactura = crearObjFactura();
                     numeF +=1;
@@ -676,39 +706,55 @@ public class Controlador {
       
             db.actualizarMenu(numeF);
             nuevaF.setNumf(numeF);
-            nuevaF.setDia_E(""+ventana_principal.getCuerpo().getFecha_expedicion().getDate().getDate());
-            int m_e = ventana_principal.getCuerpo().getFecha_expedicion().getDate().getMonth()+1;
+//            nuevaF.setDia_E(""+ventana_principal.getCuerpo().getFecha_expedicion().getDate().getDate());
+             nuevaF.setDia_E(""+view.getFecha_expedicion().getDate().getDate());
+//            int m_e = ventana_principal.getCuerpo().getFecha_expedicion().getDate().getMonth()+1;
+            int m_e = view.getFecha_expedicion().getDate().getMonth()+1;
             nuevaF.setMes_E(""+m_e);
-            int año_e = ventana_principal.getCuerpo().getFecha_expedicion().getDate().getYear()+1900;
+//            int año_e = ventana_principal.getCuerpo().getFecha_expedicion().getDate().getYear()+1900;
+            int año_e = view.getFecha_expedicion().getDate().getYear()+1900;
             nuevaF.setAño_E(""+año_e);
-            nuevaF.setDia_V(""+ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getDate());
-            int m_v = ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getMonth()+1;
+//            nuevaF.setDia_V(""+ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getDate());
+            nuevaF.setDia_V(""+view.getFecha_vencimiento().getDate().getDate());
+//            int m_v = ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getMonth()+1;
+            int m_v = view.getFecha_vencimiento().getDate().getMonth()+1;
             nuevaF.setMes_V(""+m_v);
-            int año_v = ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getYear()+1900;
+//            int año_v = ventana_principal.getCuerpo().getFecha_vencimiento().getDate().getYear()+1900;
+            int año_v = view.getFecha_vencimiento().getDate().getYear()+1900;
             nuevaF.setAño_V(""+año_v);
-            String cln = ventana_principal.getCuerpo().getJCBCliente().getSelectedItem().toString();
+//            String cln = ventana_principal.getCuerpo().getJCBCliente().getSelectedItem().toString();
+            String cln = view.getjCBNombreCliente().getSelectedItem().toString();
             nuevaF.setCliente(cln);
-            String nit = ventana_principal.getCuerpo().getJTFNit().getText();
+//            String nit = ventana_principal.getCuerpo().getJTFNit().getText();
+            String nit = view.getjLcontentNit().getText();
             nuevaF.setNit(nit);
-            String direct = ventana_principal.getCuerpo().getJTFDireccion().getText();
+//            String direct = ventana_principal.getCuerpo().getJTFDireccion().getText();
+            String direct = view.getjLDireccion().getText();
             nuevaF.setDireccion(direct);
-            String tel = ventana_principal.getCuerpo().getJTFTelefono().getText();
+//            String tel = ventana_principal.getCuerpo().getJTFTelefono().getText();
+            String tel = view.getjLTelefono().getText();
             nuevaF.setTelefono(tel);
-            JTextArea cantidad = ventana_principal.getCuerpo().getJTACantidades();
+//            JTextArea cantidad = ventana_principal.getCuerpo().getJTACantidades();
+            JTextArea cantidad = view.getjTXACantidad();
             List<String> cant = cargarListString(cantidad);
             nuevaF.setCantiad(cant);
-            JTextArea concepto = ventana_principal.getCuerpo().getJTAConcepto();
+//            JTextArea concepto = ventana_principal.getCuerpo().getJTAConcepto();
+            JTextArea concepto = view.getjTXAConcepto();
             List<String> con = cargarListString(concepto);
             nuevaF.setConceptos(con);
             @SuppressWarnings("LocalVariableHidesMemberVariable")
-            JTextArea valores = ventana_principal.getCuerpo().getJTAValores();
+//            JTextArea valores = ventana_principal.getCuerpo().getJTAValores();
+            JTextArea valores = view.getjTXAValores();
             List<Double> val = cargarListDouble(valores);
             nuevaF.setValores(val);
-            String sub = ventana_principal.getCuerpo().getJTFNeto().getText();
+//            String sub = ventana_principal.getCuerpo().getJTFNeto().getText();
+            String sub = view.getjLcontentValorNeto().getText();
             nuevaF.setSubtotal(Double.parseDouble(darFormatoC(sub)));
-            String tot = ventana_principal.getCuerpo().getJTFTotal().getText();
+//            String tot = ventana_principal.getCuerpo().getJTFTotal().getText();
+            String tot = view.getjLcontentValorTotal().getText();
             nuevaF.setTotal(Double.parseDouble(darFormatoC(tot)));
-            String iv = ventana_principal.getCuerpo().getJTFIVA().getText();
+//            String iv = ventana_principal.getCuerpo().getJTFIVA().getText();
+            String iv = view.getjLcontentValorIva().getText();
             nuevaF.setIva(Double.parseDouble(darFormatoC(iv)));
  
             String valorStringTotal = tot;
@@ -1187,7 +1233,8 @@ public class Controlador {
      * Ejecuta la ccion al oprimir el boton Actualizar del menu.
      */
     private void ejecutarMenuManualPdf(){
-        JMenuItem iterador = ventana_principal.getManual();
+//        JMenuItem iterador = ventana_principal.getManual();
+        JButtonRadius iterador = view.getBtnPdfEstructura();
         iterador.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {} 
@@ -1225,14 +1272,16 @@ public class Controlador {
         int año = fecSis.get(Calendar.YEAR);
         int añoV = año-1900; 
         Date date_ini = new Date(añoV,mes,dia );
-        ventana_principal.getCuerpo().getFecha_expedicion().setDate(date_ini);
+        //ventana_principal.getCuerpo().getFecha_expedicion().setDate(date_ini);
+        view.getFecha_expedicion().setDate(date_ini);
         fecSis.add(Calendar.DATE,15);
         int diaVen = fecSis.get(Calendar.DATE);
         int mesVen = fecSis.get(Calendar.MONTH);
         int añoVen = fecSis.get(Calendar.YEAR);
         int añoOk = añoVen-1900;
         Date date_fin = new Date(añoOk,mesVen,diaVen);
-        ventana_principal.getCuerpo().getFecha_vencimiento().setDate(date_fin);    
+//        ventana_principal.getCuerpo().getFecha_vencimiento().setDate(date_fin);   
+        view.getFecha_vencimiento().setDate(date_fin);
     }
 
     }
