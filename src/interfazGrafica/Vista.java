@@ -5,6 +5,7 @@
  */
 package interfazGrafica;
 
+import com.sun.jmx.mbeanserver.Util;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -16,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +26,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ComboBoxUI;
 
 /**
@@ -33,56 +38,66 @@ import javax.swing.plaf.ComboBoxUI;
 public class Vista extends JFrame {
 
     private JButtonRadius btnClose,
-                          btnCreate,
-                          btnEdit,
-                          btnIva,
-                          btnConsecutivo,
-                          btnPdfEstructura,
-                          btnPdf;
+            btnCreate,
+            btnEdit,
+            btnIva,
+            btnConsecutivo,
+            btnPdfEstructura,
+            btnPdf;
 
     private JPanel jPAside,
-                   jPHeader,
-                   jPBody,
-                   jPInfoCliente,
-                   jPConcepto,
-                   jPValores,
-                   jPTotales;
+            jPHeader,
+            jPBody,
+            jPInfoCliente,
+            jPConcepto,
+            jPValores,
+            jPTotales;
 
-    private JLabel  jLTitle,
-                    jLlogo, 
-                    jLDateInicio,
-                    jLDateEnd,
-                    jLNombreCliente,
-                    jLNit,
-                    jLcontentNit,
-                    jLTelefono,
-                    jLcontentTelefono,
-                    jLDireccion,
-                    jLcontentDireccion,
-                    jLValorIva,
-                    jLcontentValorIva,
-                    jLvalorNeto,
-                    jLcontentValorNeto,
-                    jLvalorTotal,
-                    jLcontentValorTotal;
+    private JLabel jLTitle,
+            jLlogo,
+            jLDateInicio,
+            jLDateEnd,
+            jLNombreCliente,
+            jLNit,
+            jLcontentNit,
+            jLTelefono,
+            jLcontentTelefono,
+            jLDireccion,
+            jLcontentDireccion,
+            jLValorIva,
+            jLcontentValorIva,
+            jLvalorNeto,
+            jLcontentValorNeto,
+            jLvalorTotal,
+            jLcontentValorTotal;
 
     private JComboBox<String> jCBNombreCliente;
 
     private JTextArea jTXAConcepto,
-                      jTXAValores,
-                      jTXACantidad;
-    
+            jTXAValores,
+            jTXACantidad;
+
     private JDateChooser fecha_expedicion,
-                         fecha_vencimiento;
-    
+            fecha_vencimiento;
+
+    public static final int CHAT_ROW_LIMIT = 6;
+
     private Font fuente = new Font("Serif", 1, 15);
-    
+
+    private JScrollPane scrollConcepto,
+            scrollValor,
+            scrollCantidad;
+    private JCheckBox jCheck1,
+            jCheck2;
+
     public Vista() {
         setSize(800, 600);
         setTitle("Facturación");
         setUndecorated(true);
         setLayout(null);
+        setEnabled(true);
         setLocationRelativeTo(null);
+ 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/invoice.png"));
         setIconImage(icon);
         crt_JPAside();
@@ -142,13 +157,13 @@ public class Vista extends JFrame {
         jPHeader.add(btnClose);
         jPHeader.setVisible(true);
     }
-    
-    private void crt_jLogo(){
-       ImageIcon i = new ImageIcon(Vista.class.getResource("/img/logoDis.png")); 
-       jLlogo = new JLabel(i);
-       jLlogo.setBounds(30, 15, 80, 100);
+
+    private void crt_jLogo() {
+        ImageIcon i = new ImageIcon(Vista.class.getResource("/img/logoDis.png"));
+        jLlogo = new JLabel(i);
+        jLlogo.setBounds(30, 15, 80, 100);
     }
-    
+
     private void crt_btnCreate() {
         ImageIcon i = new ImageIcon(Vista.class.getResource("/img/Create.png"));
         btnCreate = new JButtonRadius(i, new Color(11, 44, 64), new Color(11, 44, 64));
@@ -273,7 +288,7 @@ public class Vista extends JFrame {
         jLDateInicio.setFont(fuente);
         fecha_expedicion = new JDateChooser();
         fecha_expedicion.setBounds(180, 140, 150, 20);
-	
+
     }
 
     private void crt_jLDateEnd() {
@@ -288,7 +303,7 @@ public class Vista extends JFrame {
     private void crt_jpInfoCliente() {
         jPInfoCliente = new JPanel();
         jPInfoCliente.setBounds(180, 170, 595, 120);
-        jPInfoCliente.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Información Cliente", 0, 0, new Font("Serif", 1, 12), Color.white));
+        jPInfoCliente.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(11, 44, 64)), "Información Cliente", 0, 0, fuente, new Color(11, 44, 64)));
         jPInfoCliente.setBackground(new Color(33, 133, 191));
         crt_jLNombreCliente();
         crt_jLNit();
@@ -308,60 +323,55 @@ public class Vista extends JFrame {
     private void crt_jLNombreCliente() {
         jLNombreCliente = new JLabel("Cliente: ");
         jLNombreCliente.setForeground(Color.WHITE);
-        jLNombreCliente.setBounds(190, 190, 50, 20);
+        jLNombreCliente.setBounds(190, 190, 65, 20);
         jLNombreCliente.setFont(fuente);
         jCBNombreCliente = new JComboBox<>();
         jCBNombreCliente.setFont(fuente);
         jCBNombreCliente.setForeground(Color.white);
-        jCBNombreCliente.setBounds(245, 190, 500, 20);
+        jCBNombreCliente.setBounds(250, 190, 505, 20);
         jCBNombreCliente.setBackground(new Color(33, 133, 191));
         jCBNombreCliente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         jCBNombreCliente.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
         jCBNombreCliente.setFocusable(false);
         jCBNombreCliente.setUI(JComboBoxColors.CreateUi(jCBNombreCliente));
         jCBNombreCliente.setVisible(true);
-        
+
         //jCBNombreCliente.setEditor(new JComboBoxColors(new Color(33, 133, 191)));
-      
         //jCBNombreCliente.setEditable(true);
-       
-       
-
-
         //jCBNombreCliente.repaint();
     }
 
     private void crt_jLNit() {
         jLNit = new JLabel("Nit: ");
         jLNit.setForeground(Color.white);
-        jLNit.setBounds(190, 220, 20, 20);
+        jLNit.setBounds(190, 220, 30, 20);
         jLNit.setFont(fuente);
         jLcontentNit = new JLabel();
         jLcontentNit.setFont(fuente);
         jLcontentNit.setForeground(Color.white);
-        jLcontentNit.setBounds(215, 220, 100, 20);
+        jLcontentNit.setBounds(220, 220, 100, 20);
     }
 
     private void crt_jLTelefono() {
         jLTelefono = new JLabel("Telefono: ");
         jLTelefono.setForeground(Color.white);
-        jLTelefono.setBounds(375, 220, 50, 20);
+        jLTelefono.setBounds(375, 220, 90, 20);
         jLTelefono.setFont(fuente);
         jLcontentTelefono = new JLabel();
         jLcontentTelefono.setFont(fuente);
         jLcontentTelefono.setForeground(Color.white);
-        jLcontentTelefono.setBounds(430, 220, 100, 20);
+        jLcontentTelefono.setBounds(445, 220, 120, 20);
     }
 
     private void crt_jLDireccion() {
         jLDireccion = new JLabel("Dirección: ");
         jLDireccion.setForeground(Color.white);
-        jLDireccion.setBounds(190, 250, 50, 20);
+        jLDireccion.setBounds(190, 250, 90, 20);
         jLDireccion.setFont(fuente);
         jLcontentDireccion = new JLabel();
         jLcontentDireccion.setFont(fuente);
         jLcontentDireccion.setForeground(Color.white);
-        jLcontentDireccion.setBounds(245, 250, 500, 20);
+        jLcontentDireccion.setBounds(265, 250, 490, 20);
     }
 
     private void crt_jpConcepto() {
@@ -369,30 +379,62 @@ public class Vista extends JFrame {
         jPConcepto.setBounds(180, 300, 595, 120);
         jPConcepto.setFont(fuente);
         jPConcepto.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.WHITE), "Concepto", 0, 0,
-                new Font("Serif", 1, 12), Color.white)
+                BorderFactory.createLineBorder(new Color(11, 44, 64)), "Concepto", 0, 0,
+                fuente, new Color(11, 44, 64))
         );
         jPConcepto.setBackground(new Color(33, 133, 191));
         crt_jtxaConcepto();
-        add(jTXAConcepto);
+        //add(scrollConcepto);
         jPConcepto.setVisible(true);
     }
 
     private void crt_jtxaConcepto() {
-        JScrollPane scroll;
-        jTXAConcepto = new JTextArea(3, 1);
+
+        jTXAConcepto = new JTextArea();
         jTXAConcepto.setBackground(new Color(33, 133, 191));
         jTXAConcepto.setForeground(Color.WHITE);
         jTXAConcepto.setFont(fuente);
-        jTXAConcepto.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
         jTXAConcepto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         jTXAConcepto.setBounds(190, 325, 560, 80);
+        jTXAConcepto.setLineWrap(true);
+        jTXAConcepto.setWrapStyleWord(true);
+        jTXAConcepto.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateLineCount(jTXAConcepto, jPConcepto);
+            }
 
-        scroll = new JScrollPane(jTXAConcepto);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll.setBounds(750, 325, 15, 80);
-        scroll.setVisible(true);
-        add(scroll);
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateLineCount(jTXAConcepto, jPConcepto);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateLineCount(jTXAConcepto, jPConcepto);
+            }
+        });
+    
+
+ 
+        //jTXAConcepto.getUI().getRootView(jTXAConcepto);
+        scrollConcepto = new JScrollPane(jTXAConcepto);
+        scrollConcepto.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollConcepto.setBounds(190, 325, 560, 80);//750 325 20 80
+        scrollConcepto.setBackground(new Color(33, 133, 191));
+        scrollConcepto.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
+        //scrollConcepto.setVisible(true);
+        this.add(scrollConcepto);
+
+    }
+    
+       private void updateLineCount(JTextArea iterador, JPanel panelIterador){
+        int lineCount = iterador.getLineCount();
+        if (lineCount <= CHAT_ROW_LIMIT) {
+            iterador.setRows(lineCount);
+            panelIterador.revalidate();
+            jPBody.revalidate();
+        }
     }
 
     private void crt_jpValores() {
@@ -400,16 +442,29 @@ public class Vista extends JFrame {
         jPValores.setBounds(180, 430, 595, 150);
         jPValores.setFont(fuente);
         jPValores.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.WHITE), "Valores", 0, 0,
-                new Font("Serif", 1, 12), Color.white)
+                BorderFactory.createLineBorder(new Color(11, 44, 64)), "Valores", 0, 0,
+                fuente, new Color(11, 44, 64))
         );
         jPValores.setBackground(new Color(33, 133, 191));
         crt_jtxaValores();
         crt_jtxCantidad();
         crt_jPTotales();
         crt_jBtnPDF();
-        add(jTXAValores);
-        add(jTXACantidad);
+        jCheck1 = new JCheckBox();
+        jCheck1.setBounds(190, 480, 20, 20);
+        jCheck1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        jCheck1.setBackground(new Color(33, 133, 191));
+
+        jCheck1.setSelected(true);
+        jCheck2 = new JCheckBox();
+        jCheck2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        jCheck2.setBackground(new Color(33, 133, 191));
+        jCheck2.setSelected(true);
+        jCheck2.setBounds(190, 510, 20, 20);
+        add(jCheck1);
+        add(jCheck2);
+        //add(jTXAValores);
+        //add(jTXACantidad);
         add(jPTotales);
         add(btnPdf);
         jPValores.setVisible(true);
@@ -422,17 +477,18 @@ public class Vista extends JFrame {
         jTXAValores.setBackground(new Color(33, 133, 191));
         jTXAValores.setForeground(Color.WHITE);
         jTXAValores.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.WHITE), "Valor hora", 0, 0,
-                new Font("Serif", 1, 15), Color.white)
+                BorderFactory.createLineBorder(new Color(11, 44, 64)), "Valor hora", 0, 0,
+                fuente, new Color(11, 44, 64))
         );
         jTXAValores.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        jTXAValores.setBounds(190, 460, 100, 90);
+        jTXAValores.setBounds(220, 460, 130, 90);
 
-        scroll = new JScrollPane(jTXAValores);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll.setBounds(290, 460, 15, 90);
-        scroll.setVisible(true);
-        add(scroll);
+        scrollValor = new JScrollPane(jTXAValores);
+        scrollValor.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollValor.setBounds(220, 460, 130, 90);//320 460 20 90
+        scrollValor.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
+        scrollValor.setVisible(true);
+        this.add(scrollValor);
     }
 
     private void crt_jtxCantidad() {
@@ -441,26 +497,27 @@ public class Vista extends JFrame {
         jTXACantidad.setBackground(new Color(33, 133, 191));
         jTXACantidad.setForeground(Color.WHITE);
         jTXACantidad.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.WHITE), "Cantidad", 0, 0,
-                new Font("Serif", 1, 15), Color.white)
+                BorderFactory.createLineBorder(new Color(11, 44, 64)), "Cantidad", 0, 0,
+                fuente, new Color(11, 44, 64))
         );
         jTXACantidad.setFont(fuente);
         jTXACantidad.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        jTXACantidad.setBounds(320, 460, 100, 90);
+        jTXACantidad.setBounds(360, 460, 100, 90);
 
-        scroll = new JScrollPane(jTXACantidad);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll.setBounds(420, 460, 15, 90);
-        scroll.setVisible(true);
-        add(scroll);
+        scrollCantidad = new JScrollPane(jTXACantidad);
+        scrollCantidad.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollCantidad.setBounds(360, 460, 100, 90);//450 460 20 90 
+        scrollCantidad.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
+        scrollCantidad.setVisible(true);
+        this.add(scrollCantidad);
     }
 
     private void crt_jPTotales() {
         jPTotales = new JPanel();
-        jPTotales.setBounds(450, 460, 180, 90);
+        jPTotales.setBounds(470, 460, 180, 90);
         jPTotales.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.WHITE), "Totales", 0, 0,
-                new Font("Serif", 1, 12), Color.white)
+                BorderFactory.createLineBorder(new Color(11, 44, 64)), "Totales", 0, 0,
+                fuente, new Color(11, 44, 64))
         );
         jPTotales.setBackground(new Color(33, 133, 191));
         crt_jLValorIva();
@@ -478,32 +535,37 @@ public class Vista extends JFrame {
     private void crt_jLValorIva() {
         jLValorIva = new JLabel("Iva: ");
         jLValorIva.setForeground(Color.white);
-        jLValorIva.setBounds(460, 480, 50, 20);
+        jLValorIva.setBounds(490, 480, 50, 20);
         jLValorIva.setFont(fuente);
         jLcontentValorIva = new JLabel();
         jLcontentValorIva.setForeground(Color.white);
-        jLcontentValorIva.setBounds(515, 480, 100, 20);
+        jLcontentValorIva.setBounds(535, 480, 100, 20);
+        jLcontentValorIva.setFont(fuente);
     }
-    
+
     private void crt_jLValorneto() {
         jLvalorNeto = new JLabel("Neto: ");
         jLvalorNeto.setForeground(Color.white);
-        jLvalorNeto.setBounds(460, 500, 50, 20);
+        jLvalorNeto.setBounds(490, 500, 50, 20);
+        jLvalorNeto.setFont(fuente);
         jLcontentValorNeto = new JLabel();
         jLcontentValorNeto.setForeground(Color.white);
-        jLcontentValorNeto.setBounds(515, 500, 100, 20);
+        jLcontentValorNeto.setBounds(535, 500, 100, 20);
+        jLcontentValorNeto.setFont(fuente);
     }
-    
+
     private void crt_jLValorTotal() {
         jLvalorTotal = new JLabel("Total: ");
         jLvalorTotal.setForeground(Color.white);
-        jLvalorTotal.setBounds(460, 520, 50, 20);
+        jLvalorTotal.setBounds(490, 520, 50, 20);
+        jLvalorTotal.setFont(fuente);
         jLcontentValorTotal = new JLabel();
         jLcontentValorTotal.setForeground(Color.white);
-        jLcontentValorTotal.setBounds(515, 520, 100, 20);
+        jLcontentValorTotal.setBounds(535, 520, 100, 20);
+        jLcontentValorTotal.setFont(fuente);
     }
-    
-    private void crt_jBtnPDF(){
+
+    private void crt_jBtnPDF() {
         ImageIcon i = new ImageIcon(Vista.class.getResource("/img/Pdf.png"));
         btnPdf = new JButtonRadius(i, new Color(33, 133, 191), new Color(33, 133, 191));
         btnPdf.setBorderPainted(false);
@@ -511,12 +573,8 @@ public class Vista extends JFrame {
         btnPdf.setFocusable(false);
         btnPdf.setText("Imprimir");
         btnPdf.setForeground(Color.WHITE);
+        btnPdf.setFont(fuente);
         btnPdf.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnPdf.addActionListener((ActionEvent e) -> {
-            if (e.getSource().equals(btnPdf)) {
-
-            }
-        });
 
     }
 
@@ -526,7 +584,6 @@ public class Vista extends JFrame {
 //    public static void main(String[] args) {
 //        Vista v = new Vista();
 //    }
-
     public JButtonRadius getBtnClose() {
         return btnClose;
     }
@@ -813,6 +870,22 @@ public class Vista extends JFrame {
 
     public void setFecha_vencimiento(JDateChooser fecha_vencimiento) {
         this.fecha_vencimiento = fecha_vencimiento;
+    }
+
+    public JCheckBox getjCheck1() {
+        return jCheck1;
+    }
+
+    public void setjCheck1(JCheckBox jCheck1) {
+        this.jCheck1 = jCheck1;
+    }
+
+    public JCheckBox getjCheck2() {
+        return jCheck2;
+    }
+
+    public void setjCheck2(JCheckBox jCheck2) {
+        this.jCheck2 = jCheck2;
     }
 
 }

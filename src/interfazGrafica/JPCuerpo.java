@@ -224,7 +224,7 @@ public class JPCuerpo extends JPanel {
         scroll = new JScrollPane(JTAConcepto);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setBounds(75, 125, 475, 80);
-        scroll.setVisible(true);
+//        scroll.setVisible(true);
         add(scroll);
         
         
@@ -457,8 +457,4 @@ public class JPCuerpo extends JPanel {
         return JTACantidades;
     }
     
-    
-    
-
- 
 }
