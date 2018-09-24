@@ -994,7 +994,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt="",parteuno = "",partedos = "",parteTres = "";
         if((String.valueOf(vl.charAt(0)).equals("1"))){
-          parteuno = " un millon"; 
+          parteuno = " un millon "; 
         }else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" millones "; 
         }
@@ -1124,7 +1124,7 @@ public class Controlador {
             rt=c;
         }
       else if((!String.valueOf(vl.charAt(0)).equals("0"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(!String.valueOf(vl.charAt(2)).equals("0"))){
-          ite =vl.charAt(0)+""+"00";
+          ite = vl.charAt(0)+""+"00";
           c = valores.get(ite)+" ";
           d = valores.get(String.valueOf(vl.charAt(2)));
           rt =c+" "+d;
@@ -1142,9 +1142,9 @@ public class Controlador {
               rt=d;
               }
       else if((String.valueOf(vl.charAt(0)).equals("0"))&&(!String.valueOf(vl.charAt(1)).equals("0"))&&(!String.valueOf(vl.charAt(2)).equals("0"))){
-            ite = String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2));
-              d = valores.get(ite);
-              rt=d;
+           ite = String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2));
+              //d = valores.get(ite);
+              rt= escribirDecimas(ite);
         }
        else if((String.valueOf(vl.charAt(0)).equals("0"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))){
            rt = " ";
@@ -1176,7 +1176,7 @@ public class Controlador {
      * @param vl
      * @return 
      */
-    @SuppressWarnings({"element-type-mismatch", "UnusedAssignment"})
+    
     private String escribirDecimas(String vl){
         @SuppressWarnings("UnusedAssignment")
                 String rt = " ";
@@ -1212,6 +1212,10 @@ public class Controlador {
                 rt=" ";
             }       
             else{
+                 ite = String.valueOf(String.valueOf(vl.charAt(0)))+0;
+                 rt = ite + " y ";
+                 ite = String.valueOf(String.valueOf(vl.charAt(1)));
+                 rt +=ite;
                  System.out.println("Caso no contemplado en decimas");
                  
             }

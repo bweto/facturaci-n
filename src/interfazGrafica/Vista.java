@@ -5,16 +5,15 @@
  */
 package interfazGrafica;
 
-import com.sun.jmx.mbeanserver.Util;
 import com.toedter.calendar.JDateChooser;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -23,18 +22,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.ComboBoxUI;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import logica.CellRenderer;
+import logica.HeaderCellRenderer;
 
 /**
  *
  * @author DisToshiba
  */
+
 public class Vista extends JFrame {
 
     private JButtonRadius btnClose,
@@ -51,7 +53,8 @@ public class Vista extends JFrame {
             jPInfoCliente,
             jPConcepto,
             jPValores,
-            jPTotales;
+            jPTotales,
+            jpBackground;
 
     private JLabel jLTitle,
             jLlogo,
@@ -70,7 +73,9 @@ public class Vista extends JFrame {
             jLcontentValorNeto,
             jLvalorTotal,
             jLcontentValorTotal;
-
+    
+    private JTable jTblContenido;
+    private JScrollPane scroll;
     private JComboBox<String> jCBNombreCliente;
 
     private JTextArea jTXAConcepto,
@@ -78,7 +83,7 @@ public class Vista extends JFrame {
             jTXACantidad;
 
     private JDateChooser fecha_expedicion,
-            fecha_vencimiento;
+                         fecha_vencimiento;
 
     public static final int CHAT_ROW_LIMIT = 6;
 
@@ -92,24 +97,33 @@ public class Vista extends JFrame {
 
     public Vista() {
         setSize(800, 600);
-        setTitle("Facturación");
+        //setTitle("Facturación");
         setUndecorated(true);
-        setLayout(null);
-        setEnabled(true);
+        //setLayout(null);
+        //setEnabled(true);
         setLocationRelativeTo(null);
- 
+        setResizable(false);
+        setLocationByPlatform(true);
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/invoice.png"));
         setIconImage(icon);
+        jpBackground();
+        add(jpBackground);
+        setVisible(true);
+
+    }
+    
+    private void jpBackground(){
+        jpBackground = new JPanel();
+ 
+        jpBackground.setSize(800, 600);
         crt_JPAside();
         crt_JPHeader();
         crt_JPBody();
         add(jPAside);
         add(jPHeader);
         add(jPBody);
-        setVisible(true);
-
     }
-
+    
     private void crt_JPAside() {
         jPAside = new JPanel();
         jPAside.setLayout(null);
@@ -271,6 +285,7 @@ public class Vista extends JFrame {
         crt_jpInfoCliente();
         crt_jpConcepto();
         crt_jpValores();
+        crt_tblContent();
         add(jLDateInicio);
         add(fecha_expedicion);
         add(jLDateEnd);
@@ -278,9 +293,43 @@ public class Vista extends JFrame {
         add(jPInfoCliente);
         add(jPConcepto);
         add(jPValores);
+        //add(scroll);
+         //add(jTblContenido);
         jPBody.setVisible(true);
     }
-
+    
+    private void crt_tblContent(){
+       
+       Object[] titulo = {"Conceptos","Cantidad","Valor","IVA"}; 
+       DefaultTableModel model = new DefaultTableModel(titulo,10);
+       
+       jTblContenido= new JTable(model);
+       jTblContenido.setBounds(180, 300, 595, 150);
+       jTblContenido.setPreferredScrollableViewportSize(new Dimension(595,100));
+       jTblContenido.getTableHeader().setReorderingAllowed(false);
+       jTblContenido.setFillsViewportHeight(true);
+       jTblContenido.setUpdateSelectionOnSort(false);
+       jTblContenido.setEnabled(true);
+       jTblContenido.setGridColor(Color.BLACK);
+       jTblContenido.setShowHorizontalLines( true );
+       jTblContenido.setColumnSelectionAllowed(true);
+       jTblContenido.setSelectionForeground( Color.black );
+       jTblContenido.setGridColor(new Color(0,191,255));
+       jTblContenido.setDefaultRenderer (Object.class, new CellRenderer());
+       jTblContenido.setSelectionBackground(new Color(0,191,255) );
+       jTblContenido.setAutoResizeMode(1);
+       jTblContenido.setSurrendersFocusOnKeystroke(false);
+       jTblContenido.setColumnSelectionAllowed(false);
+       jTblContenido.setRowHeight(25);
+       jTblContenido.setRowSelectionAllowed(true);
+       scroll = new JScrollPane(jTblContenido);
+       jTblContenido.setShowVerticalLines(false);
+       JTableHeader tblheader = jTblContenido.getTableHeader();
+       tblheader.setDefaultRenderer(new HeaderCellRenderer());
+       scroll.setVisible(true);
+       scroll.setBounds(180, 300, 595, 150);
+    }
+    
     private void crt_jLDateInicio() {
         jLDateInicio = new JLabel("Fecha de Expedición");
         jLDateInicio.setForeground(Color.white);
@@ -376,7 +425,7 @@ public class Vista extends JFrame {
 
     private void crt_jpConcepto() {
         jPConcepto = new JPanel();
-        jPConcepto.setBounds(180, 300, 595, 120);
+        jPConcepto.setBounds(240, 300, 420, 120);
         jPConcepto.setFont(fuente);
         jPConcepto.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(11, 44, 64)), "Concepto", 0, 0,
@@ -395,7 +444,7 @@ public class Vista extends JFrame {
         jTXAConcepto.setForeground(Color.WHITE);
         jTXAConcepto.setFont(fuente);
         jTXAConcepto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        jTXAConcepto.setBounds(190, 325, 560, 80);
+        jTXAConcepto.setBounds(260, 325, 380, 80);
         jTXAConcepto.setLineWrap(true);
         jTXAConcepto.setWrapStyleWord(true);
         jTXAConcepto.getDocument().addDocumentListener(new DocumentListener() {
@@ -420,7 +469,7 @@ public class Vista extends JFrame {
         //jTXAConcepto.getUI().getRootView(jTXAConcepto);
         scrollConcepto = new JScrollPane(jTXAConcepto);
         scrollConcepto.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollConcepto.setBounds(190, 325, 560, 80);//750 325 20 80
+        scrollConcepto.setBounds(250, 325, 400, 80);//750 325 20 80
         scrollConcepto.setBackground(new Color(33, 133, 191));
         scrollConcepto.setBorder(BorderFactory.createLineBorder(new Color(33, 133, 191)));
         //scrollConcepto.setVisible(true);
