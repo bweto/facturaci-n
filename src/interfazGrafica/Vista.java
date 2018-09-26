@@ -6,14 +6,17 @@
 package interfazGrafica;
 
 import com.toedter.calendar.JDateChooser;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -29,6 +32,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.NavigationFilter;
 import logica.CellRenderer;
 import logica.HeaderCellRenderer;
 
@@ -45,7 +49,8 @@ public class Vista extends JFrame {
             btnIva,
             btnConsecutivo,
             btnPdfEstructura,
-            btnPdf;
+            btnPdf,
+            btnMin;
 
     private JPanel jPAside,
             jPHeader,
@@ -72,7 +77,9 @@ public class Vista extends JFrame {
             jLvalorNeto,
             jLcontentValorNeto,
             jLvalorTotal,
-            jLcontentValorTotal;
+            jLcontentValorTotal,
+            jLcontrol
+            ;
     
     private JTable jTblContenido;
     private JScrollPane scroll;
@@ -86,7 +93,7 @@ public class Vista extends JFrame {
                          fecha_vencimiento;
 
     public static final int CHAT_ROW_LIMIT = 6;
-
+   
     private Font fuente = new Font("Serif", 1, 15);
 
     private JScrollPane scrollConcepto,
@@ -94,16 +101,18 @@ public class Vista extends JFrame {
             scrollCantidad;
     private JCheckBox jCheck1,
             jCheck2;
-
+    
+    private int x,y =0;
+    
     public Vista() {
         setSize(800, 600);
-        //setTitle("Facturación");
+        setTitle("Facturación");
         setUndecorated(true);
         //setLayout(null);
         //setEnabled(true);
         setLocationRelativeTo(null);
         setResizable(false);
-        setLocationByPlatform(true);
+       
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/invoice.png"));
         setIconImage(icon);
         jpBackground();
@@ -159,16 +168,35 @@ public class Vista extends JFrame {
         });
 
     }
+    
+    private void crt_btnMin() {
+        ImageIcon i = new ImageIcon(Vista.class.getResource("/img/Minimize.png"));
+        btnMin = new JButtonRadius(i, new Color(22, 88, 127), new Color(33, 133, 191), 10, 10);
+        btnMin.setBorderPainted(false);
+        btnMin.setFont(fuente);
+        btnMin.setBounds(580, 5, 30, 30);
+        btnMin.setFocusable(false);
+        btnMin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnMin.addActionListener((ActionEvent e) -> {
+            if (e.getSource().equals(btnMin)) {
+                this.setExtendedState(1);
+            }
+        });
+
+    }
 
     private void crt_JPHeader() {
         jPHeader = new JPanel();
         jPHeader.setLayout(null);
         jPHeader.setBounds(150, 0, 650, 100);
         jPHeader.setBackground(new Color(22, 88, 127));
+        crt_btnMin();
         crt_btnClose();
         crt_jltitle();
+        jPHeader.add(jLcontrol);
         jPHeader.add(jLTitle);
         jPHeader.add(btnClose);
+        jPHeader.add(btnMin);
         jPHeader.setVisible(true);
     }
 
@@ -269,10 +297,52 @@ public class Vista extends JFrame {
     }
 
     private void crt_jltitle() {
+        
+        jLcontrol = new JLabel();
+        jLcontrol.setBounds(0, 0,550, 100);
+        jLcontrol.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                x = e.getX();
+                y = e.getY();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+               
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        } );
+        jLcontrol.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                setLocation(getLocation().x + e.getX()- x, getLocation().y + e.getY() - y);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                
+            }
+        } );
         jLTitle = new JLabel("Facturación");
         jLTitle.setForeground(Color.white);
         jLTitle.setFont(new Font("serif", 0, 40));
         jLTitle.setBounds(200, 30, 220, 50);
+        
+       
     }
 
     private void crt_JPBody() {
@@ -447,6 +517,7 @@ public class Vista extends JFrame {
         jTXAConcepto.setBounds(260, 325, 380, 80);
         jTXAConcepto.setLineWrap(true);
         jTXAConcepto.setWrapStyleWord(true);
+        
         jTXAConcepto.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -935,6 +1006,14 @@ public class Vista extends JFrame {
 
     public void setjCheck2(JCheckBox jCheck2) {
         this.jCheck2 = jCheck2;
+    }
+
+    public JButtonRadius getBtnMin() {
+        return btnMin;
+    }
+
+    public void setBtnMin(JButtonRadius btnMin) {
+        this.btnMin = btnMin;
     }
 
 }

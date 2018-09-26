@@ -54,7 +54,7 @@ private void existe(){
                     + "nombre varchar(80),"
                     + " nit varchar(20),"
                     + " direccion varchar(100)"
-                    + ", telefono varchar(30))";
+                    + ", telefono varchar(100))";
           crear_tablas(con);
            con = "create table iva(id numeric primary key, "
                     + "valor numeric)";
