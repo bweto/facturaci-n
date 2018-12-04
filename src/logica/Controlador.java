@@ -866,7 +866,7 @@ public class Controlador {
         valores.put("300","trecientos");
         valores.put("400","cuatrocientos");
         valores.put("500","quinientos");
-        valores.put("600","seicientos");
+        valores.put("600","seiscientos");
         valores.put("700","setecientos");
         valores.put("800","ochocientos");
         valores.put("900","novecientos");
