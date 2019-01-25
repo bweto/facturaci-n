@@ -945,7 +945,11 @@ public class Controlador {
             segundaParte =" ";
         }
         else{
-            segundaParte = escribirCentesimas(""+vl.charAt(3)+""+vl.charAt(4)+""+vl.charAt(5))+" mil ";
+            segundaParte = colocarTerminos(String.valueOf(vl.charAt(3)),
+                                   String.valueOf(vl.charAt(4)),
+                                   String.valueOf(vl.charAt(5)),
+                                   " mil "
+                                   );    ;
         }
         if((String.valueOf(vl.charAt(6)).equals("0"))&&(String.valueOf(vl.charAt(7)).equals("0"))&&(String.valueOf(vl.charAt(8)).equals("0"))){
             terceraParte =" pesos moneda corriente.";
@@ -976,7 +980,11 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",parteuno = "", parteDos = "",parteTres = "";
         parteuno = escribirDecimas(String.valueOf(vl.charAt(0))+String.valueOf(vl.charAt(1)))+" millones "; 
-        parteDos = escribirCentesimas(String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3))+String.valueOf(vl.charAt(4)))+" mil ";
+        parteDos = colocarTerminos(String.valueOf(vl.charAt(2)),
+                                   String.valueOf(vl.charAt(3)),
+                                   String.valueOf(vl.charAt(4)),
+                                   " mil "
+                                   );    
         parteTres = escribirCentesimas(String.valueOf(vl.charAt(5))+String.valueOf(vl.charAt(6))+String.valueOf(vl.charAt(7)))
              +" pesos moneda corriente."; 
         
@@ -998,7 +1006,12 @@ public class Controlador {
         }else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" millones "; 
         }
-        partedos = escribirCentesimas(String.valueOf(vl.charAt(1))+String.valueOf(vl.charAt(2))+String.valueOf(vl.charAt(3)))+" mil ";
+      
+        partedos = colocarTerminos(String.valueOf(vl.charAt(1)),
+                                   String.valueOf(vl.charAt(2)),
+                                   String.valueOf(vl.charAt(3)),
+                                   " mil "
+                                   );    
         parteTres = escribirCentesimas(String.valueOf(vl.charAt(4))+String.valueOf(vl.charAt(5))+String.valueOf(vl.charAt(6)))
            +" pesos moneda corriente."; 
         rt=parteuno+partedos+parteTres;
@@ -1046,7 +1059,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",parteuno = "",partedos = "";
         if(String.valueOf(vl.charAt(0)).equals("1")){
-            parteuno = " mi";
+            parteuno = " mil ";
         }
         else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" mil "; 
@@ -1104,6 +1117,7 @@ public class Controlador {
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
     
+  
     /**escribirCentesimas
      *Escribe el formato ###
      * @param vl
@@ -1169,6 +1183,19 @@ public class Controlador {
             }
             
         return rt;
+    }
+    
+    /*
+        ColocarTerminos
+        Cuadno colocar el acompañante a una cifra de tres digitos
+    */
+    private String colocarTerminos(String c1, String c2, String c3, String termino){
+        String frase = "";
+        frase = (c1.equals("0") && 
+                 c2.equals("0") && 
+                 c3.equals("0") )? "":
+                 escribirCentesimas(c1+c2+c3)+termino;
+        return frase;
     }
     
     /**escribirDecimas

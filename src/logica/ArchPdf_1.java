@@ -100,7 +100,7 @@ public class ArchPdf_1 {
         //si destino es diferente de null
         if(this.ruta_destino!=null){
              // se crea instancia del documento
-            Document mipdf = new Document(PageSize.LETTER,25f,-35f,-10f,0f); //-10,-47,1,1
+            Document mipdf = new Document(PageSize.LETTER,25f,-48f,-16f,0f); //-10,-47,1,1
             // se establece una instancia a un documento pdf
             @SuppressWarnings("unused")
             PdfWriter pw = PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));//aqui se esta creando el archivo
@@ -267,9 +267,9 @@ public class ArchPdf_1 {
                 String añoVencimiento = fac.getAño_V();
                 
                 String texto = String.format("%1s", diaCreacion)+String.format("%4s",mesCreacion)
-                        +String.format("%7s",añoCreacion)+String.format("%12s",diaVencimiento)
+                        +String.format("%7s",añoCreacion)+String.format("%13s",diaVencimiento)
                         +String.format("%5s",mesVencimiento)+String.format("%7s",añoVencimiento);
-                PdfPCell fecha = new PdfPCell(new Phrase("\n\n\n\n"+"\n\n\n"+texto,fuenteNormalN));
+                PdfPCell fecha = new PdfPCell(new Phrase("\n\n\n\n"+"\n\n"+texto,fuenteNormalN));
                 fecha.setColspan(8);
                 fecha.setBorderColor(BaseColor.WHITE);
                 fecha.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -576,7 +576,7 @@ public class ArchPdf_1 {
      float[]medidas = {100.0f,100.0f,100.0f};
         tbvalores.setWidths(medidas);
         
-        PdfPCell son = new PdfPCell(new Phrase(String.format("\n\n"+"%5s",fac.getValorTxt()),fuenteNN));
+        PdfPCell son = new PdfPCell(new Phrase(String.format("\n\n\n"+"%5s",fac.getValorTxt()),fuenteNN));
         son.setColspan(2);
         son.setRowspan(3);
         son.setBorderColor(BaseColor.WHITE);
@@ -591,7 +591,7 @@ public class ArchPdf_1 {
         subtotal.setBorderColor(BaseColor.WHITE);
         subtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
         subtotal.setVerticalAlignment(Element.ALIGN_CENTER);
-        PdfPCell valSubtotal = new PdfPCell(new Phrase(String.format("\n\n  "+"%5s",darFormatoDec(String.valueOf(fac.getSubtotal()))),fuenteNN));
+        PdfPCell valSubtotal = new PdfPCell(new Phrase(String.format("\n\n\n  "+"%5s",darFormatoDec(String.valueOf(fac.getSubtotal()))),fuenteNN));
         valSubtotal.setBorder(0);
         valSubtotal.setBorderColor(BaseColor.WHITE);
         valSubtotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
