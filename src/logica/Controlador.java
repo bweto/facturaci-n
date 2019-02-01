@@ -228,8 +228,6 @@ public class Controlador {
      });         
     }
     
-    
-    
     /**calcularCantidades
      * calcula con respecto a la cantidad.
      */
@@ -362,6 +360,8 @@ public class Controlador {
                  if(e.getSource().equals(in.getPanelInicial().getjBGuardar())){
                      JFIngresoDeClientes.seleccion = 1;
                      validarCampos(in);
+                   
+             
                  }
             }
         });

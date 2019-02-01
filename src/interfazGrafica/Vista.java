@@ -5,6 +5,7 @@
  */
 package interfazGrafica;
 
+import com.itextpdf.text.Document;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -23,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -38,7 +40,7 @@ import logica.HeaderCellRenderer;
 
 /**
  *
- * @author DisToshiba
+ * @authorRoberto Garcia
  */
 
 public class Vista extends JFrame {
@@ -508,7 +510,7 @@ public class Vista extends JFrame {
     }
 
     private void crt_jtxaConcepto() {
-
+        
         jTXAConcepto = new JTextArea();
         jTXAConcepto.setBackground(new Color(33, 133, 191));
         jTXAConcepto.setForeground(Color.WHITE);
@@ -517,26 +519,40 @@ public class Vista extends JFrame {
         jTXAConcepto.setBounds(260, 325, 380, 80);
         jTXAConcepto.setLineWrap(true);
         jTXAConcepto.setWrapStyleWord(true);
-        
+        //jTXAConcepto.addInputMethodListener(l);
         jTXAConcepto.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateLineCount(jTXAConcepto, jPConcepto);
+                if (jTXAConcepto.getLineCount() > 9){
+                    try{
+                        destroy(jTXAConcepto.getLineCount());
+                    }
+                    catch(ArrayIndexOutOfBoundsException err){
+                        JOptionPane.showMessageDialog(null,"Solo puede ingresar 9 lineas");
+                        jTXAConcepto.setSelectionStart(1);
+                    }
+                    
+                //updateLineCount(jTXAConcepto, jPConcepto);
+               
             }
-
+            }
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateLineCount(jTXAConcepto, jPConcepto);
+               //updateLineCount(jTXAConcepto, jPConcepto);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateLineCount(jTXAConcepto, jPConcepto);
+                //updateLineCount(jTXAConcepto, jPConcepto);
+            }
+            
+            private void destroy(int p){
+                jTXAConcepto.setSelectionStart(0);
+                jTXAConcepto.remove(jTXAConcepto.getLineCount());
+                JOptionPane.showMessageDialog(null, "se Alcanso el limite de lineas");
             }
         });
-    
-
- 
+        
         //jTXAConcepto.getUI().getRootView(jTXAConcepto);
         scrollConcepto = new JScrollPane(jTXAConcepto);
         scrollConcepto.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -548,9 +564,11 @@ public class Vista extends JFrame {
 
     }
     
-       private void updateLineCount(JTextArea iterador, JPanel panelIterador){
+    
+    private void updateLineCount(JTextArea iterador, JPanel panelIterador){
         int lineCount = iterador.getLineCount();
-        if (lineCount <= CHAT_ROW_LIMIT) {
+        System.out.println(lineCount);
+        if (lineCount <= CHAT_ROW_LIMIT && lineCount < 10) {
             iterador.setRows(lineCount);
             panelIterador.revalidate();
             jPBody.revalidate();
@@ -602,7 +620,39 @@ public class Vista extends JFrame {
         );
         jTXAValores.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         jTXAValores.setBounds(220, 460, 130, 90);
+        jTXAValores.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (jTXAValores.getLineCount() > 9){
+                    try{
+                        destroy(jTXAValores.getLineCount());
+                    }
+                    catch(ArrayIndexOutOfBoundsException err){
+                        JOptionPane.showMessageDialog(null,"Solo puede ingresar 9 lineas");
+                        jTXAValores.setSelectionStart(1);
+                    }
+                    
+                //updateLineCount(jTXAConcepto, jPConcepto);
+               
+            }
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+               //updateLineCount(jTXAConcepto, jPConcepto);
+            }
 
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //updateLineCount(jTXAConcepto, jPConcepto);
+            }
+            
+            private void destroy(int p){
+                jTXAValores.setSelectionStart(0);
+                jTXAValores.remove(jTXAValores.getLineCount());
+                JOptionPane.showMessageDialog(null, "se Alcanso el limite de lineas");
+            }
+        });
+        
         scrollValor = new JScrollPane(jTXAValores);
         scrollValor.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollValor.setBounds(220, 460, 130, 90);//320 460 20 90
@@ -623,7 +673,40 @@ public class Vista extends JFrame {
         jTXACantidad.setFont(fuente);
         jTXACantidad.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         jTXACantidad.setBounds(360, 460, 100, 90);
+        jTXACantidad.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (jTXACantidad.getLineCount() > 9){
+                    try{
+                        destroy(jTXACantidad.getLineCount());
+                    }
+                    catch(ArrayIndexOutOfBoundsException err){
+                        JOptionPane.showMessageDialog(null,"Solo puede ingresar 9 lineas");
+                        jTXACantidad.setSelectionStart(1);
+                    }
+                    
+                //updateLineCount(jTXAConcepto, jPConcepto);
+               
+            }
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+               //updateLineCount(jTXAConcepto, jPConcepto);
+            }
 
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //updateLineCount(jTXAConcepto, jPConcepto);
+            }
+            
+            private void destroy(int p){
+                jTXACantidad.setSelectionStart(0);
+                jTXACantidad.remove(jTXACantidad.getLineCount());
+                JOptionPane.showMessageDialog(null, "se Alcanso el limite de lineas");
+            }
+        });
+        
+        
         scrollCantidad = new JScrollPane(jTXACantidad);
         scrollCantidad.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollCantidad.setBounds(360, 460, 100, 90);//450 460 20 90 
