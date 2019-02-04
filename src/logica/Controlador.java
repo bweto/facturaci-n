@@ -1,4 +1,3 @@
-
 package logica;
 
 import com.itextpdf.text.DocumentException;
@@ -11,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -106,8 +108,124 @@ public class Controlador {
         this.asignarValores();
         this.calcularIVA();
         this.calcularCantidades();
+        this.handleCheckBox();
     }
-   
+    private void handleCheckBox(){
+        view.getjCheck1().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+               double neto = 0;
+               double valorIva = 0;
+               double total =  0;
+               double val = 0;
+               double valIva = iva*0.01;
+               double iterador = 0;
+               int contador = 1;
+               
+               String[] valoresCantidades = view.getjTXACantidad().getText().split("\n");
+               String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
+               for( int z = 0;z<valoresEntrantes.length;z++){
+                   try{
+                       iterador = Double.parseDouble(valoresEntrantes[z])*Double.parseDouble(valoresCantidades[z]);
+                       neto+= iterador;
+                       switch(contador){
+                           case 1:{
+                               val = Double.parseDouble(valoresEntrantes[0])*Double.parseDouble(valoresCantidades[0]);
+                               valorIva += (view.getjCheck1().isSelected()) ?  val * valIva:0;
+                               break;
+                           }
+                           case 2:{
+                               val = Double.parseDouble(valoresEntrantes[1]) * Double.parseDouble(valoresCantidades[1]);
+                               valorIva += (view.getjCheck2().isSelected()) ? val * valIva:0;
+                               break;
+                           }
+                           default: {
+                               
+                           }
+                       }
+                           contador++;            
+                    }
+                    catch (NumberFormatException |ArrayIndexOutOfBoundsException ex){
+                       //calcularIVA();
+                    }
+                }
+               
+            total    = valorIva+neto;
+            view.getjLcontentValorIva().setText(darFormatoDec(String.valueOf(valorIva)));
+            view.getjLcontentValorNeto().setText(darFormatoDec(String.valueOf(neto)));
+            view.getjLcontentValorTotal().setText(darFormatoDec(String.valueOf(total)));
+           
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        view.getjCheck2().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+               double neto = 0;
+               double valorIva = 0;
+               double total =  0;
+               double val = 0;
+               double valIva = iva*0.01;
+               double iterador = 0;
+               int contador = 1;
+               
+               String[] valoresCantidades = view.getjTXACantidad().getText().split("\n");
+               String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
+               for( int z = 0;z<valoresEntrantes.length;z++){
+                   try{
+                       iterador = Double.parseDouble(valoresEntrantes[z])*Double.parseDouble(valoresCantidades[z]);
+                       neto+= iterador;
+                       switch(contador){
+                           case 1:{
+                               val = Double.parseDouble(valoresEntrantes[0])*Double.parseDouble(valoresCantidades[0]);
+                               valorIva += (view.getjCheck1().isSelected()) ?  val * valIva:0;
+                               break;
+                           }
+                           case 2:{
+                               val = Double.parseDouble(valoresEntrantes[1]) * Double.parseDouble(valoresCantidades[1]);
+                               valorIva += (view.getjCheck2().isSelected()) ? val * valIva:0;
+                               break;
+                           }
+                           default: {
+                               
+                           }
+                       }
+                           contador++;            
+                    }
+                    catch (NumberFormatException |ArrayIndexOutOfBoundsException ex){
+                       //calcularIVA();
+                    }
+                }
+               
+            total    = valorIva+neto;
+            view.getjLcontentValorIva().setText(darFormatoDec(String.valueOf(valorIva)));
+            view.getjLcontentValorNeto().setText(darFormatoDec(String.valueOf(neto)));
+            view.getjLcontentValorTotal().setText(darFormatoDec(String.valueOf(total)));
+           
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+    }
     /**llenar
      * Llena la información del jcombo box
      */
@@ -163,69 +281,116 @@ public class Controlador {
         });
     }
     
+    
+    
     /**calcularIVA
      * Suma los valores en el campo del campo valores y los suma para hallar el
      * valor del IVA.
      */
     @SuppressWarnings("Convert2Lambda")
     private void calcularIVA() {
-        //ventana_principal.getCuerpo().getJTAValores().addCaretListener(new CaretListener()
-        view.getjTXAValores().addCaretListener(new CaretListener() {
-         @Override
-         public void caretUpdate(CaretEvent e){
-            double neto = 0;
-            
-//            String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
-//            String[] cantidades        = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
-              String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
-              String[] cantidades        = view.getjTXACantidad().getText().split("\n");
-             double valorIva = 0;//(view.getjCheck1().isSelected()) ? neto*iva*0.01:0;  
-             double total    = 0;
-             double val = 0;
-            for(int i = 0;i<valoresEntrantes.length;i++){
-                try{
-                    if(cantidades.length == 0){
-                    val = Double.parseDouble(valoresEntrantes[i]);
-                    neto+= val;
-                    valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
-                    if(valoresEntrantes.length > 2){
-                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
+//        view.getjTXAValores().addCaretListener(new CaretListener() {
+//         @Override
+//         public void caretUpdate(CaretEvent e){
+//            double neto = 0;
+////            String[] valoresEntrantes  = ventana_principal.getCuerpo().getJTAValores().getText().split("\n");
+////            String[] cantidades        = ventana_principal.getCuerpo().getJTACantidades().getText().split("\n");
+//              String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
+//              String[] cantidades        = view.getjTXACantidad().getText().split("\n");
+//             double valorIva = 0;//(view.getjCheck1().isSelected()) ? neto*iva*0.01:0;  
+//             double total    = 0;
+//             double val = 0;
+//            for(int i = 0;i<valoresEntrantes.length;i++){
+//                try{
+//                    if(cantidades.length == 0){
+//                    val = Double.parseDouble(valoresEntrantes[i]);
+//                    neto+= val;
+//                    valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
+//                    if(valoresEntrantes.length > 2){
+//                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
+//                    }
+//                    }
+//                else{
+//                try{
+//                    neto+= (Double.parseDouble(valoresEntrantes[i]))*(Double.parseDouble(cantidades[i]));
+//                     valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
+//                    if(valoresEntrantes.length > 2){
+//                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
+//                    }
+//                }catch(ArrayIndexOutOfBoundsException tr){
+//                    neto+= Double.parseDouble(valoresEntrantes[i]);
+//                     valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
+//                    if(valoresEntrantes.length > 2){
+//                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
+//                    }
+//                }       
+//                    }
+//                }
+//                catch (NumberFormatException ex){
+//                   //calcularIVA();
+//                }
+//                //cierra for
+//            }
+//          
+////            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? neto*iva*0.01:0;  
+////            double total    = valorIva+neto;
+////            ventana_principal.getCuerpo().getJTFIVA().setText(String.valueOf(valorIva));
+////            ventana_principal.getCuerpo().getJTFNeto().setText(String.valueOf(neto));
+////            ventana_principal.getCuerpo().getJTFTotal().setText(String.valueOf(total)); 
+//           // double valorIva = neto*iva*0.01;  
+//            total    = valorIva+neto;
+//            view.getjLcontentValorIva().setText(String.valueOf(valorIva));
+//            view.getjLcontentValorNeto().setText(String.valueOf(neto));
+//            view.getjLcontentValorTotal().setText(String.valueOf(total));
+//         }
+//     });       
+
+view.getjTXAValores().addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+               double neto = 0;
+               double valorIva = 0;
+               double total =  0;
+               double val = 0;
+               double valIva = iva*0.01;
+               double iterador = 0;
+               int contador = 1;
+               
+               String[] valoresCantidades = view.getjTXACantidad().getText().split("\n");
+               String[] valoresEntrantes  = view.getjTXAValores().getText().split("\n");
+               for( int z = 0;z<valoresEntrantes.length;z++){
+                   try{
+                       iterador = Double.parseDouble(valoresEntrantes[z])*Double.parseDouble(valoresCantidades[z]);
+                       neto+= iterador;
+                       switch(contador){
+                           case 1:{
+                               val = Double.parseDouble(valoresEntrantes[0])*Double.parseDouble(valoresCantidades[0]);
+                               valorIva += (view.getjCheck1().isSelected()) ?  val * valIva:0;
+                               break;
+                           }
+                           case 2:{
+                               val = Double.parseDouble(valoresEntrantes[1]) * Double.parseDouble(valoresCantidades[1]);
+                               valorIva += (view.getjCheck2().isSelected()) ? val * valIva:0;
+                               break;
+                           }
+                           default: {
+                               
+                           }
+                       }
+                           contador++;            
                     }
-                    }
-                else{
-                try{
-                    neto+= (Double.parseDouble(valoresEntrantes[i]))*(Double.parseDouble(cantidades[i]));
-                     valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
-                    if(valoresEntrantes.length > 2){
-                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
-                    }
-                }catch(ArrayIndexOutOfBoundsException tr){
-                    neto+= Double.parseDouble(valoresEntrantes[i]);
-                     valorIva = ((view.getjCheck1().isSelected()) && (Double.parseDouble(valoresEntrantes[0]) == val )) ? val*iva*0.01:0;
-                    if(valoresEntrantes.length > 2){
-                    valorIva+= ((view.getjCheck2().isSelected()) && (Double.parseDouble(valoresEntrantes[1]) == val )) ? val*iva*0.01:0;
-                    }
-                }       
+                    catch (NumberFormatException |ArrayIndexOutOfBoundsException ex){
+                       //calcularIVA();
                     }
                 }
-                catch (NumberFormatException ex){
-                   //calcularIVA();
-                }
-                //cierra for
-                }
-          
-//            double valorIva = (ventana_principal.getCuerpo().getJChBIva().isSelected()) ? neto*iva*0.01:0;  
-//            double total    = valorIva+neto;
-//            ventana_principal.getCuerpo().getJTFIVA().setText(String.valueOf(valorIva));
-//            ventana_principal.getCuerpo().getJTFNeto().setText(String.valueOf(neto));
-//            ventana_principal.getCuerpo().getJTFTotal().setText(String.valueOf(total)); 
-           // double valorIva = neto*iva*0.01;  
+               
             total    = valorIva+neto;
-            view.getjLcontentValorIva().setText(String.valueOf(valorIva));
-            view.getjLcontentValorNeto().setText(String.valueOf(neto));
-            view.getjLcontentValorTotal().setText(String.valueOf(total));
-         }
-     });         
+            view.getjLcontentValorIva().setText(darFormatoDec(String.valueOf(valorIva)));
+            view.getjLcontentValorNeto().setText(darFormatoDec(String.valueOf(neto)));
+            view.getjLcontentValorTotal().setText(darFormatoDec(String.valueOf(total)));
+         
+            }             
+            });
     }
     
     /**calcularCantidades
@@ -290,7 +455,7 @@ public class Controlador {
         //System.out.println(informacionEntrante);
         @SuppressWarnings("MismatchedReadAndWriteOfArray")
         String informacionPorLineas[] = informacionEntrante.split("&");
-        for (String informacionPorLinea : informacionPorLineas) {
+        for(String informacionPorLinea : informacionPorLineas){
             this.estraerInformacionLinea(informacionPorLinea);
         }
     }
@@ -319,7 +484,7 @@ public class Controlador {
      * Ejecuta la accion al oprimir el boton crear del menu.
      */
     private void ejecutarMenuCrear(){
-//        JMenuItem iterador = ventana_principal.getCrear();
+//      JMenuItem iterador = ventana_principal.getCrear();
         JButtonRadius iterador = view.getBtnCreate();
         iterador.addMouseListener(new MouseListener() {
             @Override
@@ -360,8 +525,6 @@ public class Controlador {
                  if(e.getSource().equals(in.getPanelInicial().getjBGuardar())){
                      JFIngresoDeClientes.seleccion = 1;
                      validarCampos(in);
-                   
-             
                  }
             }
         });
@@ -415,6 +578,9 @@ public class Controlador {
        asignarInfoComboBox();
        JOptionPane.showMessageDialog(null, "Se agrego un nuevo cliente",
                "Mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
+       estaActivaCrearClientes = true;
+       in.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+       in.dispose();
     }
     
     /**validarCampos
@@ -441,7 +607,7 @@ public class Controlador {
     private void ejecutarMenuActualizar(){
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         String dir = "src/informacion/iva.txt";
-//        JMenuItem iterador = ventana_principal.getActualizar();
+//      JMenuItem iterador = ventana_principal.getActualizar();
         JButtonRadius iterador = view.getBtnIva();
         iterador.addMouseListener(new MouseListener() {
             @Override
@@ -504,7 +670,7 @@ public class Controlador {
      */
     private void ejecutarMenuModificar(){
         
-//        JMenuItem iterador = ventana_principal.getModificar();
+//      JMenuItem iterador = ventana_principal.getModificar();
         JButtonRadius iterador = view.getBtnEdit();
         iterador.addMouseListener(new MouseListener() {
             @Override
@@ -583,7 +749,7 @@ public class Controlador {
     }
     
     /**activarCampos
-     * Activa los campos de información y crea un objeto cliente.
+       // Activa los campos de información y crea un objeto cliente.
      */
 //    private void activarCampos(){
 //        ventana_principal.getCuerpo().getJCBCliente().setEditable(true);
@@ -599,20 +765,17 @@ public class Controlador {
     int fila =0;
     @SuppressWarnings("Convert2Lambda")
     private void corregir(JDVistaInfoCLientes ventana){
-        
         ventana.getModificar().getTblClientes().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {}
             @Override
             public void focusLost(FocusEvent e) {
-          
              fila = ventana.getModificar().getTblClientes().getSelectedRow()+1;
              ventana.getModificar().getTblClientes().clearSelection();
              ventana.getModificar().getTblClientes().setFocusable(false);
              //ventana.getModificar().getTblClientes().editCellAt(0, 0);
              //acturalizarDB(fila,ventana.getModificar().getTblClientes());
-             //System.out.println("Esta es la fila: "+fila);
-             
+             //System.out.println("Esta es la fila: "+fila);   
             }
         });
         ventana.getJBCorregir().addActionListener(new ActionListener() {
@@ -620,8 +783,11 @@ public class Controlador {
            public void actionPerformed(ActionEvent e) {
             if(e.getSource().equals(ventana.getJBCorregir())){
                convertirTabla(ventana.getModificar().getTblClientes(),fila);
-                                                                                                
-                                        }
+               JOptionPane.showMessageDialog(null,"Correción exitosa");
+               estaActivaVerClientes = true;
+               ventana.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+               ventana.dispose();
+                }
            }
        });
     }
@@ -637,6 +803,7 @@ public class Controlador {
             db.actualizarRegistro(fila, nom, nit, tel, dire);
         }
     }
+    
     /**convertirTabla
     * Convierte los elementos de la tabla en objetos cliente y actualizar los objetos. en el txt
     * @param tbl 
@@ -1059,7 +1226,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",parteuno = "",partedos = "";
         if(String.valueOf(vl.charAt(0)).equals("1")){
-            parteuno = " mil ";
+            parteuno = "mil";
         }
         else{
         parteuno = escribirUnidades(String.valueOf(vl.charAt(0)))+" mil "; 
@@ -1117,7 +1284,6 @@ public class Controlador {
         return rt.substring(0, 1).toUpperCase() + rt.substring(1); 
     }
     
-  
     /**escribirCentesimas
      *Escribe el formato ###
      * @param vl
@@ -1128,7 +1294,7 @@ public class Controlador {
         @SuppressWarnings("UnusedAssignment")
         String rt = "",c = "",d = "",ite = "";
       if((String.valueOf(vl.charAt(0)).equals("1"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))){
-          c = "cien ";
+          c = "cien";
           rt=c;
         }  
       else if((!String.valueOf(vl.charAt(0)).equals("0"))&&(String.valueOf(vl.charAt(1)).equals("0"))&&(String.valueOf(vl.charAt(2)).equals("0"))
@@ -1185,7 +1351,7 @@ public class Controlador {
         return rt;
     }
     
-    /*
+    /**
         ColocarTerminos
         Cuadno colocar el acompañante a una cifra de tres digitos
     */
@@ -1203,7 +1369,6 @@ public class Controlador {
      * @param vl
      * @return 
      */
-    
     private String escribirDecimas(String vl){
         @SuppressWarnings("UnusedAssignment")
                 String rt = " ";

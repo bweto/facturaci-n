@@ -6,6 +6,7 @@
 package interfazGrafica;
 
 import com.itextpdf.text.Document;
+import com.sun.scenario.effect.Merge;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -15,9 +16,14 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.scene.control.Tab;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -564,7 +570,6 @@ public class Vista extends JFrame {
 
     }
     
-    
     private void updateLineCount(JTextArea iterador, JPanel panelIterador){
         int lineCount = iterador.getLineCount();
         System.out.println(lineCount);
@@ -652,7 +657,36 @@ public class Vista extends JFrame {
                 JOptionPane.showMessageDialog(null, "se Alcanso el limite de lineas");
             }
         });
-        
+        jTXAValores.addKeyListener(new  KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+               char letras = e.getKeyChar();
+               int valor = e.getExtendedKeyCodeForChar(letras);
+                Pattern p = Pattern.compile("[^0-9^.]");
+                Matcher m = p.matcher(letras+"");
+               if(m.find() && valor != 8 && valor != 10  ){
+                   e.consume();
+                   getToolkit().beep();
+                   JOptionPane.showMessageDialog(null,"Este campo solo almacena valores numericos", "Ingrese informacion valida",JOptionPane.ERROR_MESSAGE);
+               }
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+               char letras = e.getKeyChar();
+               if(e.getExtendedKeyCodeForChar(letras)== KeyEvent.VK_TAB){
+                   e.consume();
+                   getToolkit().beep();
+                   JOptionPane.showMessageDialog(null,"Este campo solo almacena valores numericos", "Ingrese informacion valida",JOptionPane.ERROR_MESSAGE);
+               }   
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+             
+            }
+        });
         scrollValor = new JScrollPane(jTXAValores);
         scrollValor.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollValor.setBounds(220, 460, 130, 90);//320 460 20 90
@@ -705,7 +739,35 @@ public class Vista extends JFrame {
                 JOptionPane.showMessageDialog(null, "se Alcanso el limite de lineas");
             }
         });
-        
+        jTXACantidad.addKeyListener(new  KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+               char letras = e.getKeyChar();
+               int valor = e.getExtendedKeyCodeForChar(letras);
+               Pattern p = Pattern.compile("[^0-9^.]");
+               Matcher m = p.matcher(letras+"");
+               if(m.find() && valor != 8 && valor != 10){
+                   getToolkit().beep();
+                   e.consume();
+                   JOptionPane.showMessageDialog(null,"Este campo solo almacena valores numericos", "Ingrese informacion valida",JOptionPane.ERROR_MESSAGE);
+               }      
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+               char letras = e.getKeyChar();
+               if(e.getExtendedKeyCodeForChar(letras)== KeyEvent.VK_TAB){
+                   e.consume();
+                   getToolkit().beep();
+                   JOptionPane.showMessageDialog(null,"Este campo solo almacena valores numericos", "Ingrese informacion valida",JOptionPane.ERROR_MESSAGE);
+               } 
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
+            }
+        });
         
         scrollCantidad = new JScrollPane(jTXACantidad);
         scrollCantidad.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

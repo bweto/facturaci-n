@@ -26,7 +26,6 @@ class JComboBoxColors extends BasicComboBoxUI{
     public static ComboBoxUI CreateUi(JComponent com){
       return new JComboBoxColors();
     }
-
     @Override
     protected JButton createArrowButton() {
         JButton btn = new JButton();
@@ -35,7 +34,5 @@ class JComboBoxColors extends BasicComboBoxUI{
         btn.setContentAreaFilled(false);
         return btn; //To change body of generated methods, choose Tools | Templates.
     }
-    
-   
 }
 

@@ -39,8 +39,6 @@ public class JFIngresoDeClientes extends JDialog{
         panelInicial.setBounds(0, 0, 320, 300);
         add(panelInicial);
         this.setVisible(true);
-        
-        
     }
     
     /**getPanelInicial
