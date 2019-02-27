@@ -101,7 +101,7 @@ public class ArchPdf_1 {
         //si destino es diferente de null
         if(this.ruta_destino!=null){
              // se crea instancia del documento
-            Document mipdf = new Document(PageSize.LETTER,22f,-33f,-1f,0f); //-10,-47,1,1
+            Document mipdf = new Document(PageSize.LETTER,10f,-53f,-15f,0f); //-10,-47,1,1 22derecha -33izquierda -1 arriba abajo
             // se establece una instancia a un documento pdf
             @SuppressWarnings("unused")
             PdfWriter pw = PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));//aqui se esta creando el archivo
@@ -268,10 +268,10 @@ public class ArchPdf_1 {
                 String añoVencimiento = fac.getAño_V();
                 
                 String texto = String.format("%1s", diaCreacion)+String.format("%4s",mesCreacion)
-                        +String.format("%7s",añoCreacion)+String.format("%13s",diaVencimiento)
+                        +String.format("%7s",añoCreacion)+String.format("%15s",diaVencimiento)
                         +String.format("%5s",mesVencimiento)+String.format("%7s",añoVencimiento);
                 PdfPCell fecha = new PdfPCell(new Phrase("\n\n\n\n"+"\n\n"+texto,fuenteNormalN));
-                fecha.setPaddingLeft(1.5f);
+                fecha.setPaddingLeft(5.0f);//1.5
                 fecha.setColspan(8);
                 fecha.setBorderColor(BaseColor.WHITE);
                 fecha.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -308,7 +308,7 @@ public class ArchPdf_1 {
         tbcontenedor.setWidths(medidas);
         PdfPCell señor = new PdfPCell(new Phrase(String.format("%34s",fac.getCliente()),fuenteNN));
         señor.setPaddingTop(3.0f);
-        señor.setPaddingLeft(15.0f);
+        señor.setPaddingLeft(10.0f);
         señor.setColspan(2);
         señor.setBorder(5);
         señor.setBorderColor(BaseColor.WHITE);
@@ -319,9 +319,11 @@ public class ArchPdf_1 {
         nit.setBorderColor(BaseColor.WHITE);
         nit.setHorizontalAlignment(Element.ALIGN_RIGHT);
         nit.setVerticalAlignment(Element.ALIGN_TOP);
-        PdfPCell direccion = new PdfPCell(new Phrase(String.format("%32s",fac.getDireccion())+"\n",fuenteNN));
+        PdfPCell direccion = new PdfPCell(new Phrase(String.format("%34s",fac.getDireccion())+"\n",fuenteNN));
         direccion.setColspan(2);
         direccion.setPaddingTop(6.0f);
+        direccion.setPaddingBottom(6.0f);
+        direccion.setPaddingLeft(15.0f);
         direccion.setBorder(3);
         direccion.setBorder(5);
         direccion.setBorderColor(BaseColor.WHITE);
@@ -329,6 +331,7 @@ public class ArchPdf_1 {
         PdfPCell telefono = new PdfPCell(new Phrase(fac.getTelefono()+"\n",fuenteNN));
         telefono.setBorder(9);
         telefono.setPaddingTop(6.0f);
+        telefono.setPaddingBottom(6.0f);
         telefono.setBorderColor(BaseColor.WHITE);
         telefono.setHorizontalAlignment(Element.ALIGN_RIGHT);
         telefono.setVerticalAlignment(Element.ALIGN_TOP);
@@ -585,10 +588,10 @@ public class ArchPdf_1 {
         PdfPCell son;
         son = new PdfPCell(new Phrase(String.format(""+"%5s",fac.getValorTxt()),fuenteNN));
         if(fac.getConceptos().size() == 9){
-            son.setPaddingTop(4.0f);
+            son.setPaddingTop(19.0f);
         }
         else{
-            son.setPaddingTop(19.0f);
+            son.setPaddingTop(34.0f);
         }
         son.setColspan(2);
         son.setRowspan(3);
@@ -607,10 +610,10 @@ public class ArchPdf_1 {
         PdfPCell valSubtotal;
         valSubtotal = new PdfPCell(new Phrase(String.format("  "+"%5s",darFormatoDec(String.valueOf(fac.getSubtotal()))),fuenteNN));
         if(fac.getConceptos().size() == 9){
-           valSubtotal.setPaddingTop(4.0f);
+           valSubtotal.setPaddingTop(19.0f);
         }
         else{
-            valSubtotal.setPaddingTop(19.0f);
+            valSubtotal.setPaddingTop(34.0f);
         }
         valSubtotal.setBorder(0);
         valSubtotal.setBorderColor(BaseColor.WHITE);
